@@ -8,7 +8,7 @@
 
 App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
 {
-    //test000
+
 }
 
 void App::run(){
