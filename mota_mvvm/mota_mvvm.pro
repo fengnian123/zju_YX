@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
+    view/lacation.cpp \
     view/view.cpp \
     app/app.cpp \
     viewmodel/viewmodel.cpp \
@@ -19,6 +20,8 @@ SOURCES += \
     variables/variables.cpp
 
 HEADERS += \
+    total.h \
+    view/location.h \
     view/view.h \
     app/app.h \
     viewmodel/viewmodel.h \

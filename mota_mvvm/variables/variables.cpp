@@ -1,5 +1,4 @@
-﻿#include "total.h"
-
+﻿#include"variables.h"
 BRAVER Braver;
 MONSTER Monster[MONSTER_NUM];
 FLOOR Tower[TOTAL_FLOOR];

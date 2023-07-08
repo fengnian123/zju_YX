@@ -32,6 +32,7 @@ struct MONSTER
     bool boss; //是否为boss
     wstring name; //怪物名称
     string img;
+    int calc_damage(int MonsterIDTemp);
 };
 
 class BRAVER
