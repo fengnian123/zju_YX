@@ -17,7 +17,16 @@ SOURCES += \
     model/model.cpp \
     command/command.cpp \
     notification/notification.cpp \
-    variables/variables.cpp
+    variables/variables.cpp \
+    command/fight_command.cpp \
+    command/pick_key_command.cpp \
+    command/door_open_command.cpp \
+    command/floor_change_command.cpp \
+    command/dialog_command.cpp \
+    command/move_up_command.cpp \
+    command/move_down_command.cpp \
+    command/move_left_command.cpp \
+    command/move_right_command.cpp
 
 HEADERS += \
     total.h \
@@ -28,7 +37,16 @@ HEADERS += \
     model/model.h \
     command/command.h \
     notification/notification.h \
-    variables/variables.h
+    variables/variables.h \
+    command/fight_command.h \
+    command/pick_key_command.h \
+    command/door_open_command.h \
+    command/floor_change_command.h \
+    command/dialog_command.h \
+    command/move_up_command.h \
+    command/move_down_command.h \
+    command/move_left_command.h \
+    command/move_right_command.h
 
 FORMS += \
     view/view.ui
