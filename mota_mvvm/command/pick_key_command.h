@@ -2,7 +2,6 @@
 #define PICK_KEY_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class PickKeyCommand : public Command{

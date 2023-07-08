@@ -9,17 +9,10 @@ class View;
 
 class Notification
 {
-private:
-    //    std::shared_ptr<ViewModel> viewmodel;
-    //    std::shared_ptr<View> view;
-
 public:
     Notification();
-    //    void bind(std::shared_ptr<ViewModel>& viewmodel, std::shared_ptr<View>& view);
     virtual void exec() = 0;
 };
-
-
 
 class UpdateDisplayDataNotification: public Notification{
 private:

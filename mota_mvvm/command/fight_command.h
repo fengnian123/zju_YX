@@ -2,7 +2,6 @@
 #define FIGHT_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class FightCommand : public Command{

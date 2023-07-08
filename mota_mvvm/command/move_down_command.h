@@ -2,7 +2,6 @@
 #define MOVE_DOWN_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class MoveDownCommand : public Command{

@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+    #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include "variables/variables.h"
+#include <QGraphicsScene>
 class Notification;
 namespace Ui {
 class View;
@@ -20,7 +21,7 @@ class View : public QMainWindow
     Q_OBJECT
 
 public:
-    View(QWidget *parent = nullptr);
+    explicit View(QWidget *parent = nullptr);
     ~View();
     void update();
     void set_fight_command(std::shared_ptr<Command>);
@@ -40,12 +41,11 @@ public:
 
     void LoadImageBeforeGame();
 public slots:
-    void OnNormalTimerTriggered();
-    void OnOpenDoorTimerTriggered();
-    void OnCutTimerTriggered();
-    void OnFightTimerTriggered();
-    void OnGainItemTimerTriggered();
-    void HideFightWindow();
+//    void OnNormalTimerTriggered();
+//    void OnOpenDoorTimerTriggered();
+//    void OnCutTimerTriggered();
+//    void OnFightTimerTriggered();
+//    void OnGainItemTimerTriggered();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -91,11 +91,11 @@ private:
     int OldFloor;
     int keyUpCnt; //按键松开的时间
     int x,y;//位置
-    QTimer* NormalTimer; //层内动态效果的定时器
-    QTimer* OpenDoorTimer; //播放开门动画的定时器
-    QTimer* CutTimer; //转场动画的计时器
-    QTimer* FightTimer; //战斗的计时器
-    QTimer* GainItemTimer; //获得物品的计时器
+//    QTimer* NormalTimer; //层内动态效果的定时器
+//    QTimer* OpenDoorTimer; //播放开门动画的定时器
+//    QTimer* CutTimer; //转场动画的计时器
+//    QTimer* FightTimer; //战斗的计时器
+//    QTimer* GainItemTimer; //获得物品的计时器
 
     QGraphicsScene *scene_m;
     QGraphicsScene *scene_b;
@@ -113,5 +113,7 @@ private:
     std::shared_ptr<Command> move_left_command;
     std::shared_ptr<Command> move_right_command;
     std::shared_ptr<Notification> update_view_notification;
+
+    void HideFightWindow();
 };
 #endif // MAINWINDOW_H

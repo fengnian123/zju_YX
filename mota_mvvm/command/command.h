@@ -8,7 +8,7 @@ class Command
 {
 protected:
 public:
-    Command();
+    Command() {}
     virtual void exec() = 0;
 };
 

@@ -20,8 +20,9 @@ using namespace std;
 
 typedef int FLOOR[X * Y];
 
-struct MONSTER
+class MONSTER
 {
+public:
     int hp; //血量
     int atk; //攻击力
     int pdef; //防御力
@@ -32,7 +33,6 @@ struct MONSTER
     bool boss; //是否为boss
     wstring name; //怪物名称
     string img;
-    int calc_damage(int MonsterIDTemp);
 };
 
 class BRAVER
@@ -73,10 +73,11 @@ public:
     GLOBAL_VARS();
 };
 
-extern BRAVER Braver; //勇者的信息
-extern MONSTER Monster[MONSTER_NUM]; //怪物的信息
+extern BRAVER Braver;
+extern MONSTER Monster[MONSTER_NUM];
+extern GLOBAL_VARS Vars;
+
 extern FLOOR Tower[TOTAL_FLOOR];
-extern GLOBAL_VARS Vars; //一些关键的全局变量
 
 void init_monsters(); //初始化全局变量
 void init_tower();

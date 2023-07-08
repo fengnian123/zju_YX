@@ -12,6 +12,21 @@ View::View(QWidget *parent)
     , ui(new Ui::View)
 {
     ui->setupUi(this);
+    display_it = 0;
+    opendoor_it = 0;
+    updown_it = 0;
+    fight_period_it = 0;
+    fight_end_it = 0;
+    gain_item_it = 0;
+    OpenDoorTargetPos = -1;
+    OpenDoorTempData = -1;
+    FightTargetPos = -1;
+    OldFloor = 0;
+    keyUpCnt = 100;
+    scene_b = new QGraphicsScene;
+    scene_floor = new QGraphicsScene;
+    pixmap_items = new QGraphicsPixmapItem*[X * Y];
+    update_view_notification = std::static_pointer_cast<Notification, UpdateViewNotification>(std::shared_ptr<UpdateViewNotification>(new UpdateViewNotification(std::shared_ptr<View>(this))));
 }
 
 void View::LoadImageBeforeGame()
@@ -61,6 +76,23 @@ View::~View()
     delete ui;
 }
 
+void View::GameStart()
+{
+    init_tower();
+    init_monsters();
+    Braver = BRAVER();
+    Vars = GLOBAL_VARS();
+    LoadImageBeforeGame();
+    InitGraphics();
+    DisplayData();
+    DisplayFloor(Braver.floor);
+}
+
+void View::update(){
+    DisplayData();
+    DisplayFloor(Braver.floor);
+}
+
 void View::set_fight_command(std::shared_ptr<Command> command)
 {
     fight_command = command;
@@ -81,22 +113,27 @@ void View::set_dialog_command(std::shared_ptr<Command> command)
 {
     dialog_command = command;
 }
-void View::set_move_up_command(std::shared_ptr<Command> command)
-{
-    move_up_command = command;
-}
+
 void View::set_move_down_command(std::shared_ptr<Command> command)
 {
     move_down_command = command;
 }
+
+void View::set_move_up_command(std::shared_ptr<Command> command)
+{
+    move_up_command = command;
+}
+
 void View::set_move_left_command(std::shared_ptr<Command> command)
 {
     move_left_command = command;
 }
+
 void View::set_move_right_command(std::shared_ptr<Command> command)
 {
     move_right_command = command;
 }
+
 std::shared_ptr<Notification> View::get_update_view_notification(){
     return update_view_notification;
 }
@@ -131,13 +168,11 @@ void View::InitGraphics()
     //窗口大小为固定值，不可以更改
     this->setFixedSize(576, 416);
     this->setFocusPolicy(Qt::StrongFocus);
-
     //首先画背景。背景为深蓝色砖块
     QImage img_background = QImage(":/Graphics/Tilesets/Mota.png").copy(160, 0, 32, 32);
     QPalette palette;
     palette.setBrush(QPalette::Window, QPixmap::fromImage(img_background));
     this->setPalette(palette);
-
     //绘制游戏界面内的下图层。
     QImage img_llayer = QImage(":/Graphics/Tilesets/Mota.png").copy(96, 32, 32, 32);
     QGraphicsScene *scene_llayer = new QGraphicsScene;
@@ -178,12 +213,10 @@ void View::InitGraphics()
     ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
     ui->graphicsView_9->setFocusPolicy(Qt::NoFocus);
     ui->listWidget->hide();
-
     //战斗界面中勇者的图标
     scene_b->addPixmap(QPixmap::fromImage(ImgBraver[0][0]));
     ui->graphicsView_12->setScene(scene_b);
     ui->graphicsView_12->setStyleSheet("background:transparent;border:none;");
-
     //不显示战斗界面
     //    ui->graphicsView_10->setScene(scene_llayer);
     ui->graphicsView_10->setFocusPolicy(Qt::NoFocus);
@@ -191,18 +224,17 @@ void View::InitGraphics()
     ui->graphicsView_12->setFocusPolicy(Qt::NoFocus);
     ui->label_34->setStyleSheet("background-color:rgba(0,0,0,255);");
     HideFightWindow();
-
     //初始化定时器。用于展示动态效果
-    NormalTimer = new QTimer(this);
-    OpenDoorTimer = new QTimer(this);
-    CutTimer = new QTimer(this);
-    FightTimer = new QTimer(this);
-    GainItemTimer = new QTimer(this);
-    connect(NormalTimer, SIGNAL(timeout()), this, SLOT(OnNormalTimerTriggered()));
-    connect(OpenDoorTimer, SIGNAL(timeout()), this, SLOT(OnOpenDoorTimerTriggered()));
-    connect(CutTimer, SIGNAL(timeout()), this, SLOT(OnCutTimerTriggered()));
-    connect(FightTimer, SIGNAL(timeout()), this, SLOT(OnFightTimerTriggered()));
-    connect(GainItemTimer, SIGNAL(timeout()), this, SLOT(OnGainItemTimerTriggered()));
+//    NormalTimer = new QTimer(this);
+//    OpenDoorTimer = new QTimer(this);
+//    CutTimer = new QTimer(this);
+//    FightTimer = new QTimer(this);
+//    GainItemTimer = new QTimer(this);
+//    connect(NormalTimer, SIGNAL(timeout()), this, SLOT(OnNormalTimerTriggered()));
+//    connect(OpenDoorTimer, SIGNAL(timeout()), this, SLOT(OnOpenDoorTimerTriggered()));
+//    connect(CutTimer, SIGNAL(timeout()), this, SLOT(OnCutTimerTriggered()));
+//    connect(FightTimer, SIGNAL(timeout()), this, SLOT(OnFightTimerTriggered()));
+//    connect(GainItemTimer, SIGNAL(timeout()), this, SLOT(OnGainItemTimerTriggered()));
 }
 void View::DisplayData()
 {
@@ -233,7 +265,7 @@ void View::DisplayFloor(int floor)
     scene_floor->clear();
     for(y = 0; y <= 10; y++){
         for(x = 0; x <= 10; x++){
-            if (View::x == x && View::y == y)
+            if (Braver.pos_x == x && Braver.pos_y == y)
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 if (keyUpCnt <= 1)
@@ -244,7 +276,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 0 && y * View::x + x == OpenDoorTargetPos)
+            else if (Tower[floor][y * View::x + x] == 0 && y * Braver.pos_x + x == OpenDoorTargetPos)
             {
                 if (OpenDoorTempData == 21) //正在被打开的黄门
                 {
@@ -295,7 +327,7 @@ void View::DisplayFloor(int floor)
                     item_it++;
                 }
             }
-            else if (Tower[floor][y * View::x + x] == 1) //墙
+            else if (Tower[floor][y * X + x] == 1) //墙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgWall));
@@ -303,7 +335,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 11 || Tower[floor][y * View::x + x] == 12) //下楼
+            else if (Tower[floor][y * X + x] == 11 || Tower[floor][y * Braver.pos_x + x] == 12) //下楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgDownstairs));
@@ -311,7 +343,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 10 || Tower[floor][y * View::x + x] == 14) //上楼
+            else if (Tower[floor][y * X + x] == 10 || Tower[floor][y * Braver.pos_x + x] == 14) //上楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgUpstairs));
@@ -319,7 +351,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 21) //门
+            else if (Tower[floor][y * X + x] == 21) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgYDoor[0]));
@@ -327,7 +359,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 22) //门
+            else if (Tower[floor][y * X + x] == 22) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBDoor[0]));
@@ -335,7 +367,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 23) //门
+            else if (Tower[floor][y * X + x] == 23) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRDoor[0]));
@@ -343,7 +375,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 24) //门
+            else if (Tower[floor][y * X + x] == 24) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgGDoor[0]));
@@ -351,7 +383,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 25) //门
+            else if (Tower[floor][y * X + x] == 25) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgIDoor[0]));
@@ -359,7 +391,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 26) //门
+            else if (Tower[floor][y * X + x] == 26) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgFalseWall[0]));
@@ -367,7 +399,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 31) //黄钥匙
+            else if (Tower[floor][y * X + x] == 31) //黄钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgYKey));
@@ -375,7 +407,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 32) //蓝钥匙
+            else if (Tower[floor][y * X + x] == 32) //蓝钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBKey));
@@ -383,7 +415,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 33) //红钥匙
+            else if (Tower[floor][y * X + x] == 33) //红钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRKey));
@@ -399,7 +431,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 35) //大血瓶
+            else if (Tower[floor][y * X + x] == 35) //大血瓶
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBottle2));
@@ -407,7 +439,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 36) //红宝石
+            else if (Tower[floor][y * X + x] == 36) //红宝石
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRGem));
@@ -415,7 +447,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 37) //蓝钥匙
+            else if (Tower[floor][y * X + x] == 37) //蓝钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBGem));
@@ -423,7 +455,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 38) //铁剑
+            else if (Tower[floor][y * X + x] == 38) //铁剑
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgSword));
@@ -431,7 +463,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 39) //铁盾
+            else if (Tower[floor][y * X + x] == 39) //铁盾
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgShield));
@@ -447,7 +479,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 42) //商店中间
+            else if (Tower[floor][y * X + x] == 42) //商店中间
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgStoreMiddle[display_it]));
@@ -455,7 +487,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 43) //商店右端
+            else if (Tower[floor][y * X + x] == 43) //商店右端
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgStoreRight));
@@ -463,7 +495,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 45 || Tower[floor][y * X + x] == 48 || Tower[floor][y * X + x] == 50) //NPC
+            else if (Tower[floor][y * X + x] == 45 || Tower[floor][y * X + x] == 48 || Tower[floor][y * X + x] == 50) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcRed[display_it]));
@@ -471,7 +503,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 46) //NPC
+            else if (Tower[floor][y * X + x] == 46) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcThief[display_it]));
@@ -479,7 +511,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 47 || Tower[floor][y * View::x + x] == 49 || Tower[floor][y * View::x + x] == 44) //NPC
+            else if (Tower[floor][y * X + x] == 47 || Tower[floor][y * X + x] == 49 || Tower[floor][y * X + x] == 44) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcOld[display_it]));
@@ -487,7 +519,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] >= 51 && Tower[floor][y * View::x + x] <= 50 + MONSTER_NUM) //怪物
+            else if (Tower[floor][y * X + x] >= 51 && Tower[floor][y * X + x] <= 50 + MONSTER_NUM) //怪物
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgMonsters[Tower[floor][y * X + x] - 51][display_it]));
@@ -500,227 +532,223 @@ void View::DisplayFloor(int floor)
     ui->graphicsView_8->setScene(scene_floor);
 }
 
-void View::OnNormalTimerTriggered()
-{
-    keyUpCnt += 1;
-    if (display_it <= 2)
-        display_it += 1;
-    else
-        display_it = 0;
-    DisplayData();
-    DisplayFloor(Braver.floor);
-}
+//void View::OnNormalTimerTriggered()
+//{
+//    keyUpCnt += 1;
+//    if (display_it <= 2)
+//        display_it += 1;
+//    else
+//        display_it = 0;
+//    DisplayData();
+//    DisplayFloor(Braver.floor);
+//}
 
-void View::OnOpenDoorTimerTriggered()
-{
-    if (opendoor_it <= 2)
-    {
-        opendoor_it += 1;
-        DisplayFloor(Braver.floor);
-    }
-    else { //开门已经结束
-        opendoor_it = 0;
-        OpenDoorTargetPos = -1;
-        OpenDoorTempData = -1;
-        Vars.OperationStatus = 0;
-        OpenDoorTimer->stop();
-        DisplayFloor(Braver.floor);
-    }
-}
+//void View::OnOpenDoorTimerTriggered()
+//{
+//    if (opendoor_it <= 2)
+//    {
+//        opendoor_it += 1;
+//        DisplayFloor(Braver.floor);
+//    }
+//    else { //开门已经结束
+//        opendoor_it = 0;
+//        OpenDoorTargetPos = -1;
+//        OpenDoorTempData = -1;
+//        Vars.OperationStatus = 0;
+//        OpenDoorTimer->stop();
+//        DisplayFloor(Braver.floor);
+//    }
+//}
 
-void View::OnCutTimerTriggered()
-{
-    if (Vars.CutInFloor3 == false)
-    {
-        if (updown_it <= 3)
-        {
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
-            DisplayFloor(OldFloor);
-        }else if (updown_it <= 7){
-            DisplayData();
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number((8 - updown_it) * 64) + ");");
-            DisplayFloor(Braver.floor);
-        }else {
-            updown_it = 0;
-            Vars.OperationStatus = 0;
-            CutTimer->stop();
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
-            DisplayFloor(Braver.floor);
-            NormalTimer->start(200);
-        }
-    }else{
-        if (updown_it <= 3)
-        {
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
-            DisplayFloor(2);
-        }
-        else if (updown_it <= 7){
-            updown_it += 1;
-        }else if (updown_it == 8){
-            CutTimer->stop();
-            QMessageBox::about(this, "Hint", QString::fromStdWString(L" ----- 喂！醒醒！"));
-            Tower[2][6 * X + 4] = 0;
-            Tower[2][7 * X + 4] = 0;
-            Tower[2][8 * X + 3] = 0;
-            Tower[2][8 * X + 4] = 0;
-            Tower[2][8 * X + 5] = 0;
-            Tower[2][9 * X + 4] = 0;
-            Braver.floor = 1;
-            Braver.pos_x = 2;
-            Braver.pos_y = 7;
-            CutTimer->start();
-            updown_it += 1;
-        }else if (updown_it <= 12){
-            DisplayData();
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number((13 - updown_it) * 64) + ");");
-            DisplayFloor(Braver.floor);
-        }else {
-            updown_it = 0;
-            Vars.OperationStatus = 0;
-            CutTimer->stop();
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
-            DisplayFloor(Braver.floor);
-            Vars.CutInFloor3 = false;
-            NormalTimer->start(200);
-        }
-    }
-}
+//void View::OnCutTimerTriggered()
+//{
+//    if (Vars.CutInFloor3 == false)
+//    {
+//        if (updown_it <= 3)
+//        {
+//            updown_it += 1;
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
+//            DisplayFloor(OldFloor);
+//        }else if (updown_it <= 7){
+//            DisplayData();
+//            updown_it += 1;
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number((8 - updown_it) * 64) + ");");
+//            DisplayFloor(Braver.floor);
+//        }else {
+//            updown_it = 0;
+//            Vars.OperationStatus = 0;
+//            CutTimer->stop();
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
+//            DisplayFloor(Braver.floor);
+//            NormalTimer->start(200);
+//        }
+//    }else{
+//        if (updown_it <= 3)
+//        {
+//            updown_it += 1;
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
+//            DisplayFloor(2);
+//        }
+//        else if (updown_it <= 7){
+//            updown_it += 1;
+//        }else if (updown_it == 8){
+//            CutTimer->stop();
+//            QMessageBox::about(this, "Hint", QString::fromStdWString(L" ----- 喂！醒醒！"));
+//            Tower[2][6 * X + 4] = 0;
+//            Tower[2][7 * X + 4] = 0;
+//            Tower[2][8 * X + 3] = 0;
+//            Tower[2][8 * X + 4] = 0;
+//            Tower[2][8 * X + 5] = 0;
+//            Tower[2][9 * X + 4] = 0;
+//            Braver.floor = 1;
+//            Braver.pos_x = 2;
+//            Braver.pos_y = 7;
+//            CutTimer->start();
+//            updown_it += 1;
+//        }else if (updown_it <= 12){
+//            DisplayData();
+//            updown_it += 1;
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number((13 - updown_it) * 64) + ");");
+//            DisplayFloor(Braver.floor);
+//        }else {
+//            updown_it = 0;
+//            Vars.OperationStatus = 0;
+//            CutTimer->stop();
+//            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
+//            DisplayFloor(Braver.floor);
+//            Vars.CutInFloor3 = false;
+//            NormalTimer->start(200);
+//        }
+//    }
+//}
 
-void View::OnFightTimerTriggered()
-{
-    if (fight_period_it == 0)
-    {
-        //准备战斗界面
-        ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp));
-        ui->label_22->setText(QString::number(Monster[MonsterIDTemp].atk));
-        ui->label_24->setText(QString::number(Monster[MonsterIDTemp].pdef));
-        ui->label_31->setText(QString::number(Braver.hp));
-        ui->label_32->setText(QString::number(Braver.atk));
-        ui->label_33->setText(QString::number(Braver.pdef));
+//void View::OnFightTimerTriggered()
+//{
+//    if (fight_period_it == 0)
+//    {
+//        //准备战斗界面
+//        ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp));
+//        ui->label_22->setText(QString::number(Monster[MonsterIDTemp].atk));
+//        ui->label_24->setText(QString::number(Monster[MonsterIDTemp].pdef));
+//        ui->label_31->setText(QString::number(Braver.hp));
+//        ui->label_32->setText(QString::number(Braver.atk));
+//        ui->label_33->setText(QString::number(Braver.pdef));
 
-        ui->label_18->show();
-        ui->label_19->show();
-        ui->label_20->show();
-        ui->label_21->show();
-        ui->label_22->show();
-        ui->label_23->show();
-        ui->label_24->show();
-        ui->label_25->show();
-        ui->label_27->show();
-        ui->label_28->show();
-        ui->label_29->show();
-        ui->label_30->show();
-        ui->label_31->show();
-        ui->label_32->show();
-        ui->label_33->show();
-        ui->graphicsView_10->show();
+//        ui->label_18->show();
+//        ui->label_19->show();
+//        ui->label_20->show();
+//        ui->label_21->show();
+//        ui->label_22->show();
+//        ui->label_23->show();
+//        ui->label_24->show();
+//        ui->label_25->show();
+//        ui->label_27->show();
+//        ui->label_28->show();
+//        ui->label_29->show();
+//        ui->label_30->show();
+//        ui->label_31->show();
+//        ui->label_32->show();
+//        ui->label_33->show();
+//        ui->graphicsView_10->show();
 
-        scene_m = new QGraphicsScene;
-        scene_m->addPixmap(QPixmap::fromImage(ImgMonsters[MonsterIDTemp][0]));
-        ui->graphicsView_11->setScene(scene_m);
-        ui->graphicsView_11->show();
-        ui->graphicsView_11->setStyleSheet("background:transparent;border:none;");
+//        scene_m = new QGraphicsScene;
+//        scene_m->addPixmap(QPixmap::fromImage(ImgMonsters[MonsterIDTemp][0]));
+//        ui->graphicsView_11->setScene(scene_m);
+//        ui->graphicsView_11->show();
+//        ui->graphicsView_11->setStyleSheet("background:transparent;border:none;");
 
-        ui->graphicsView_12->show();
+//        ui->graphicsView_12->show();
 
-        fight_period_it = 1;
-    }else if (fight_period_it % 2 == 1 && fight_end_it == 0)
-    {
-        if (Monster[MonsterIDTemp].hp - (Braver.atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1) <= 0)
-        {
-            ui->label_20->setText(QString::number(0));
-            fight_end_it = 1;
-        }else{
-            ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp - (Braver.atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1)));
-            fight_period_it++;
-        }
-    }else if (fight_period_it % 2 == 0 && fight_end_it == 0)
-    {
-        if (Monster[MonsterIDTemp].atk > Braver.pdef)
-        {
-            ui->label_31->setText(QString::number(Braver.hp - (Monster[MonsterIDTemp].atk - Braver.pdef) * (fight_period_it / 2)));
-        }
-        fight_period_it++;
-    }else{
-        if (fight_end_it <= 2){
-            ui->label_26->show();
-            fight_end_it++;
-        }
-        else if(fight_end_it == 3){
-            //结算战斗结果
-            int damage=0 ;//之后改
-            Braver.hp -= damage;
-            Braver.gold += Monster[MonsterIDTemp].gold;
-            Braver.exp += Monster[MonsterIDTemp].exp;
-            Tower[Braver.floor][FightTargetPos] = 0;
-            //隐藏战斗界面
-            HideFightWindow();
-            ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number(Monster[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number(Monster[MonsterIDTemp].gold));
-            ui->label_34->show();
-            DisplayData();
-            fight_end_it++;
-        }
-        else if (fight_end_it <= 5)
-        {
-            fight_end_it++;
-        }else{
-            FightTimer->stop();
-            ui->label_34->hide();
-            fight_end_it = 0;
-            fight_period_it = 0;
-            MonsterIDTemp = 0;
-            Vars.OperationStatus = 0;
-            delete scene_m;
-        }
-    }
-}
+//        fight_period_it = 1;
+//    }else if (fight_period_it % 2 == 1 && fight_end_it == 0)
+//    {
+//        if (Monster[MonsterIDTemp].hp - (Braver.atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1) <= 0)
+//        {
+//            ui->label_20->setText(QString::number(0));
+//            fight_end_it = 1;
+//        }else{
+//            ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp - (Braver.atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1)));
+//            fight_period_it++;
+//        }
+//    }else if (fight_period_it % 2 == 0 && fight_end_it == 0)
+//    {
+//        if (Monster[MonsterIDTemp].atk > Braver.pdef)
+//        {
+//            ui->label_31->setText(QString::number(Braver.hp - (Monster[MonsterIDTemp].atk - Braver.pdef) * (fight_period_it / 2)));
+//        }
+//        fight_period_it++;
+//    }else{
+//        if (fight_end_it <= 2){
+//            ui->label_26->show();
+//            fight_end_it++;
+//        }
+//        else if(fight_end_it == 3){
+//            //结算战斗结果
+//            int damage=0 ;//之后改
+//            Braver.hp -= damage;
+//            Braver.gold += Monster[MonsterIDTemp].gold;
+//            Braver.exp += Monster[MonsterIDTemp].exp;
+//            Tower[Braver.floor][FightTargetPos] = 0;
+//            //隐藏战斗界面
+//            HideFightWindow();
+//            ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number(Monster[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number(Monster[MonsterIDTemp].gold));
+//            ui->label_34->show();
+//            DisplayData();
+//            fight_end_it++;
+//        }
+//        else if (fight_end_it <= 5)
+//        {
+//            fight_end_it++;
+//        }else{
+//            FightTimer->stop();
+//            ui->label_34->hide();
+//            fight_end_it = 0;
+//            fight_period_it = 0;
+//            MonsterIDTemp = 0;
+//            Vars.OperationStatus = 0;
+//            delete scene_m;
+//        }
+//    }
+//}
 
-void View::OnGainItemTimerTriggered()
-{
-    if (gain_item_it == 0)
-    {
-        ui->label_34->setText(QString::fromStdWString(Vars.gain_item_msg));
-        ui->label_34->show();
-        gain_item_it++;
-    }
-    else if (gain_item_it <= 2)
-    {
-        gain_item_it++;
-    }
-    else
-    {
-        GainItemTimer->stop();
-        ui->label_34->hide();
-        gain_item_it = 0;
-        Vars.OperationStatus = 0;
+//void View::OnGainItemTimerTriggered()
+//{
+//    if (gain_item_it == 0)
+//    {
+//        ui->label_34->setText(QString::fromStdWString(Vars.gain_item_msg));
+//        ui->label_34->show();
+//        gain_item_it++;
+//    }
+//    else if (gain_item_it <= 2)
+//    {
+//        gain_item_it++;
+//    }
+//    else
+//    {
+//        GainItemTimer->stop();
+//        ui->label_34->hide();
+//        gain_item_it = 0;
+//        Vars.OperationStatus = 0;
 
-    }
-}
+//    }
+//}
 
 void View::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Up){ //向上
         keyUpCnt = 0;
-        View::y++;
         move_up_command->exec();
     }
     if(event->key() == Qt::Key_Down){ //向下
         keyUpCnt = 0;
-        View::y--;
         move_down_command->exec();
     }
     if(event->key() == Qt::Key_Left){ //向左
         keyUpCnt = 0;
-        View::x--;
         move_left_command->exec();
     }
     if(event->key() == Qt::Key_Right){ //向右
         keyUpCnt = 0;
-        View::x++;
         move_right_command->exec();
     }
 

@@ -2,7 +2,6 @@
 #define FLOOR_CHANGE_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class FloorChangeCommand : public Command{

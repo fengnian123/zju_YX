@@ -2,7 +2,6 @@
 #define DOOR_OPEN_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class DoorOpenCommand : public Command{

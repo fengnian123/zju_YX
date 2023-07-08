@@ -2,7 +2,6 @@
 #define DIALOG_COMMAND_H
 
 #include "command.h"
-#include "viewmodel/viewmodel.h"
 #include <memory>
 
 class DialogCommand : public Command{

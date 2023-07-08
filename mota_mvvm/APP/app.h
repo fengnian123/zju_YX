@@ -17,7 +17,6 @@ private:
 public:
     App();
     void run();
-    void Init();
 };
 
 #endif

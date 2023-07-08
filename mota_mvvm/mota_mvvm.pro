@@ -8,9 +8,11 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+TARGET = MtGui
+TEMPLATE = app
+
 SOURCES += \
     main.cpp \
-    view/lacation.cpp \
     view/view.cpp \
     app/app.cpp \
     viewmodel/viewmodel.cpp \
@@ -26,11 +28,10 @@ SOURCES += \
     command/move_up_command.cpp \
     command/move_down_command.cpp \
     command/move_left_command.cpp \
-    command/move_right_command.cpp
+    command/move_right_command.cpp \
 
 HEADERS += \
     total.h \
-    view/location.h \
     view/view.h \
     app/app.h \
     viewmodel/viewmodel.h \
@@ -46,7 +47,7 @@ HEADERS += \
     command/move_up_command.h \
     command/move_down_command.h \
     command/move_left_command.h \
-    command/move_right_command.h
+    command/move_right_command.h \
 
 FORMS += \
     view/view.ui
