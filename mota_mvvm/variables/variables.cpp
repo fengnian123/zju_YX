@@ -287,8 +287,8 @@ BRAVER::BRAVER()
     status = 0;
     level = 1;
     hp = 1000;
-    atk = 449;
-    pdef = 339;
+    atk = 100;
+    pdef = 100;
     pos_x = 5;
     pos_y = 10;
     floor = 0;

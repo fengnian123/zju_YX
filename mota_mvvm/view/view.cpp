@@ -238,14 +238,14 @@ void View::InitGraphics()
 }
 void View::DisplayData()
 {
-    switch(Braver.status)
-    {
-    case 0:
-        ui->label_8->setText(QString::fromWCharArray(L"正常"));
-        break;
-    default:
-        ui->label_8->setText(QString::fromWCharArray(L"正常"));
-    }
+//    switch(Braver.status)
+//    {
+//    case 0:
+//        ui->label_8->setText(QString::fromWCharArray(L"正常"));
+//        break;
+//    default:
+//        ui->label_8->setText(QString::fromWCharArray(L"正常"));
+//    }
     ui->label_9->setText(QString::number(Braver.level));
     ui->label_10->setText(QString::number(Braver.hp));
     ui->label_11->setText(QString::number(Braver.atk));
