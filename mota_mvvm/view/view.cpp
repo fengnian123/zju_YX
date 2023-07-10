@@ -101,6 +101,10 @@ void View::set_pick_key_command(std::shared_ptr<Command> command)
 {
     pick_key_command = command;
 }
+void View::set_pick_item_command(std::shared_ptr<Command> command)
+{
+    pick_item_command = command;
+}
 void View::set_door_open_command(std::shared_ptr<Command> command)
 {
     door_open_command = command;
@@ -276,7 +280,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * View::x + x] == 0 && y * Braver.pos_x + x == OpenDoorTargetPos)
+            else if (Tower[floor][y * X + x] == 0 && y * Braver.pos_x + x == OpenDoorTargetPos)
             {
                 if (OpenDoorTempData == 21) //正在被打开的黄门
                 {
@@ -335,7 +339,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 11 || Tower[floor][y * Braver.pos_x + x] == 12) //下楼
+            else if (Tower[floor][y * X + x] == 11 || Tower[floor][y * X + x] == 12) //下楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgDownstairs));
@@ -343,7 +347,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 10 || Tower[floor][y * Braver.pos_x + x] == 14) //上楼
+            else if (Tower[floor][y * X + x] == 10 || Tower[floor][y * X + x] == 14) //上楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgUpstairs));
@@ -447,7 +451,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 37) //蓝钥匙
+            else if (Tower[floor][y * X + x] == 37) //蓝宝石
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBGem));
@@ -751,5 +755,16 @@ void View::keyPressEvent(QKeyEvent *event)
         keyUpCnt = 0;
         move_right_command->exec();
     }
-
+    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 31 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 32 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 33){
+        pick_key_command->exec();
+    }
+    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 21 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 22 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 23){
+        door_open_command->exec();
+    }
+    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 10 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 11 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 12 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 14){
+        floor_change_command->exec();
+    }
+    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 34 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 35 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 36 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 37 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 38 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 39){
+        pick_item_command->exec();
+    }
 }

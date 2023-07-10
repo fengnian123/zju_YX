@@ -19,6 +19,7 @@ App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
     view->set_move_down_command(viewmodel->get_move_down_command());
     view->set_move_left_command(viewmodel->get_move_left_command());
     view->set_move_right_command(viewmodel->get_move_right_command());
+    view->set_pick_item_command(viewmodel->get_pick_item_command());
 
     viewmodel->set_update_view_notification(view->get_update_view_notification());
     model->set_update_display_data_notification(viewmodel->get_update_display_data_notification());

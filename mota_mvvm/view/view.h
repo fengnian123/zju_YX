@@ -33,6 +33,7 @@ public:
     void set_move_down_command(std::shared_ptr<Command>);
     void set_move_left_command(std::shared_ptr<Command>);
     void set_move_right_command(std::shared_ptr<Command>);
+    void set_pick_item_command(std::shared_ptr<Command>);
     void InitGraphics(); //初始化主界面
     void DisplayFloor(int floor); //展示楼层信息
     void DisplayData(); //展示状态数据
@@ -105,6 +106,7 @@ private:
 
     std::shared_ptr<Command> fight_command;
     std::shared_ptr<Command> pick_key_command;
+    std::shared_ptr<Command> pick_item_command;
     std::shared_ptr<Command> door_open_command;
     std::shared_ptr<Command> floor_change_command;
     std::shared_ptr<Command> dialog_command;

@@ -29,6 +29,7 @@ SOURCES += \
     command/move_down_command.cpp \
     command/move_left_command.cpp \
     command/move_right_command.cpp \
+    command/pick_item_command.cpp
 
 HEADERS += \
     total.h \
@@ -48,6 +49,7 @@ HEADERS += \
     command/move_down_command.h \
     command/move_left_command.h \
     command/move_right_command.h \
+    command/pick_item_command.h
 
 FORMS += \
     view/view.ui

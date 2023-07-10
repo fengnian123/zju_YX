@@ -2,5 +2,5 @@
 #include "viewmodel/viewmodel.h"
 
 void PickKeyCommand::exec(){
-    //viewmodel->exec_dialog_command();
+    viewmodel->exec_pick_key_command();
 }

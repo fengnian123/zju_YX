@@ -52,6 +52,7 @@ public:
     int key2; //钥匙2
     int key3; //钥匙3
     int face; //朝向
+    int have_moved;
     BRAVER();
 };
 

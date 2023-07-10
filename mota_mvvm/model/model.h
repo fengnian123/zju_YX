@@ -38,10 +38,20 @@ public:
     void change_floor(int x){Braver.floor+=x; notify();}
     void change_exp(int x){Braver.exp+=x; notify();}
     void change_gold(int x){Braver.gold+=x; notify();}
-    void change_key1(int x){Braver.key1+=x; notify();}
-    void change_key2(int x){Braver.key2+=x; notify();}
-    void change_key3(int x){Braver.key3+=x; notify();}
-    void change_face(int x){Braver.face+=x; notify();}
+    void change_key1(int x){
+        Braver.key1+=x;
+        notify();
+    }
+    void change_key2(int x){
+        Braver.key2+=x;
+        notify();
+    }
+    void change_key3(int x){
+        Braver.key3+=x;
+        notify();
+    }
+    void change_face(int x){Braver.face=x; notify();}
+    void clear_floor() {Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] = 0; notify();}
 
     int get_end_no(){return Vars.end_no;} //结局编号
     int get_dialog_no(){return Vars.dialog_no;} //对话编号

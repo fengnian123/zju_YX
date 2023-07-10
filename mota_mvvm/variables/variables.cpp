@@ -299,6 +299,7 @@ BRAVER::BRAVER()
     key3 = 0;
     status = 0;
     face = 0;
+    have_moved = 0;
 }
 
 GLOBAL_VARS::GLOBAL_VARS()

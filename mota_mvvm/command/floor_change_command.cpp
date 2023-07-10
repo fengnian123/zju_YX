@@ -2,5 +2,5 @@
 #include "viewmodel/viewmodel.h"
 
 void FloorChangeCommand::exec(){
-    //viewmodel->exec_dialog_command();
+    viewmodel->exec_floor_change_command();
 }

@@ -2,5 +2,5 @@
 #include "viewmodel/viewmodel.h"
 
 void DoorOpenCommand::exec(){
-    //viewmodel->exec_dialog_command();
+    viewmodel->exec_door_open_command();
 }

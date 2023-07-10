@@ -15,5 +15,6 @@ debug/move_up_command.o
 debug/move_down_command.o
 debug/move_left_command.o
 debug/move_right_command.o
+debug/pick_item_command.o
 debug/qrc_mtgraphics.o
 debug/moc_view.o
