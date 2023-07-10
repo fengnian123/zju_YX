@@ -12,6 +12,7 @@
 #include <QWheelEvent>
 #include "variables/variables.h"
 #include <QGraphicsScene>
+#include <QSoundEffect>
 class Notification;
 namespace Ui {
 class View;
@@ -52,7 +53,12 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 private:
     Ui::View *ui;
-
+    QSoundEffect *voice_bgm;
+    QSoundEffect *voice_key_pick;
+    QSoundEffect *voice_item_pick;
+    QSoundEffect *voice_door_open;
+    QSoundEffect *voice_floor_change;
+    QSoundEffect *voice_fight;
     QImage ImgWall;
     QImage ImgUpstairs;
     QImage ImgDownstairs;

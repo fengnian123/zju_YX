@@ -25,6 +25,12 @@ View::View(QWidget *parent)
     keyUpCnt = 100;
     scene_b = new QGraphicsScene;
     scene_floor = new QGraphicsScene;
+    voice_floor_change=new QSoundEffect;
+    voice_bgm=new QSoundEffect;
+    voice_door_open=new QSoundEffect;
+    voice_fight=new QSoundEffect;
+    voice_key_pick=new QSoundEffect;
+    voice_item_pick=new QSoundEffect;
     pixmap_items = new QGraphicsPixmapItem*[X * Y];
     update_view_notification = std::static_pointer_cast<Notification, UpdateViewNotification>(std::shared_ptr<UpdateViewNotification>(new UpdateViewNotification(std::shared_ptr<View>(this))));
 }
@@ -169,6 +175,11 @@ void View::HideFightWindow()
 
 void View::InitGraphics()
 {
+    //背景音乐
+    voice_bgm->setSource(QUrl::fromLocalFile(":/music/bgm.wav"));
+    voice_bgm->setLoopCount(QSoundEffect::Infinite);
+    voice_bgm->setVolume(1.0);
+    voice_bgm->play();
     //窗口大小为固定值，不可以更改
     this->setFixedSize(576, 416);
     this->setFocusPolicy(Qt::StrongFocus);
@@ -756,15 +767,35 @@ void View::keyPressEvent(QKeyEvent *event)
         move_right_command->exec();
     }
     if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 31 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 32 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 33){
+        //捡钥匙背景音乐
+        voice_key_pick->setSource(QUrl::fromLocalFile(":/music/gain-thing.wav"));
+        voice_key_pick->setLoopCount(1);
+        voice_key_pick->setVolume(5.0f);
+        voice_key_pick->play();
         pick_key_command->exec();
     }
     if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 21 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 22 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 23){
+        //开门背景音乐
+        voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
+        voice_door_open->setLoopCount(1);
+        voice_door_open->setVolume(5.0f);
+        voice_door_open->play();
         door_open_command->exec();
     }
     if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 10 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 11 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 12 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 14){
+        voice_item_pick->setSource(QUrl::fromLocalFile(":/music/floor-change.wav"));
+        voice_item_pick->setLoopCount(1);
+        voice_item_pick->setVolume(5.0f);
+        voice_item_pick->play();
         floor_change_command->exec();
     }
     if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 34 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 35 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 36 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 37 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 38 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 39){
+        //捡东西背景音乐
+        voice_key_pick->setSource(QUrl::fromLocalFile(":/music/gain-yao.wav"));
+        voice_key_pick->setLoopCount(1);
+        voice_key_pick->setVolume(5.0f);
+        voice_key_pick->play();
+        pick_key_command->exec();
         pick_item_command->exec();
     }
 }

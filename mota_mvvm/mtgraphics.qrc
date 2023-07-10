@@ -50,5 +50,32 @@
         <file>Graphics/Icons/13.png</file>
         <file>Graphics/Icons/24.png</file>
         <file>Graphics/Icons/44.png</file>
+        <file>music/answer.mp3</file>
+        <file>music/bingji.mp3</file>
+        <file>music/bingji_baoji.mp3</file>
+        <file>music/confirm.mp3</file>
+        <file>music/dianji_baoji.mp3</file>
+        <file>music/door_open.mp3</file>
+        <file>music/exp_update.mp3</file>
+        <file>music/floor_change.mp3</file>
+        <file>music/gain_thing.mp3</file>
+        <file>music/gain_yao.mp3</file>
+        <file>music/pianfu.mp3</file>
+        <file>music/quxiao.mp3</file>
+        <file>music/store.mp3</file>
+        <file>music/store_.mp3</file>
+        <file>music/bgm.wav</file>
+        <file>music/answer.wav</file>
+        <file>music/bingji-baoji.wav</file>
+        <file>music/confirm.wav</file>
+        <file>music/dianji-baoji.wav</file>
+        <file>music/door-open.wav</file>
+        <file>music/floor-change.wav</file>
+        <file>music/gain-object.wav</file>
+        <file>music/gain-thing.wav</file>
+        <file>music/gain-yao.wav</file>
+        <file>music/pianfu.wav</file>
+        <file>music/quxiao.wav</file>
+        <file>music/store.wav</file>
     </qresource>
 </RCC>
