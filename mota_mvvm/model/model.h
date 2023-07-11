@@ -3,55 +3,60 @@
 #include <memory>
 #include <string>
 #include "variables/variables.h"
+#include "notification/notification.h"
 
 using namespace std;
-class ViewModel;
 class Notification;
 
 class Model{
 private:
     std::shared_ptr<Notification> update_display_data_notification;
+    MONSTER Monster[MONSTER_NUM];
+    GLOBAL_VARS Vars;
+    std::shared_ptr<BRAVER> Braver;
+    std::shared_ptr<FLOOR*> Tower_ptr;
+    FLOOR Tower[TOTAL_FLOOR];
 public:
-    Model(){}
-    int get_status(){return Braver.status;}
-    int get_level(){return Braver.level;}
-    int get_hp(){return Braver.hp;}
-    int get_atk(){return Braver.atk;}
-    int get_pdef(){return Braver.pdef;}
-    int get_pos_x(){return Braver.pos_x;}
-    int get_pos_y(){return Braver.pos_y;}
-    int get_floor(){return Braver.floor;}
-    int get_exp(){return Braver.exp;}
-    int get_gold(){return Braver.gold;}
-    int get_key1(){return Braver.key1;}
-    int get_key2(){return Braver.key2;}
-    int get_key3(){return Braver.key3;}
-    int get_face(){return Braver.face;}
+    Model() : Braver(std::make_shared<BRAVER>()), Tower_ptr(std::make_shared<FLOOR*>(Tower)) {}
+    int get_status(){return Braver->status;}
+    int get_level(){return Braver->level;}
+    int get_hp(){return Braver->hp;}
+    int get_atk(){return Braver->atk;}
+    int get_pdef(){return Braver->pdef;}
+    int get_pos_x(){return Braver->pos_x;}
+    int get_pos_y(){return Braver->pos_y;}
+    int get_floor(){return Braver->floor;}
+    int get_exp(){return Braver->exp;}
+    int get_gold(){return Braver->gold;}
+    int get_key1(){return Braver->key1;}
+    int get_key2(){return Braver->key2;}
+    int get_key3(){return Braver->key3;}
+    int get_face(){return Braver->face;}
 
-    void change_status(int x){Braver.status+=x; notify();}
-    void change_level(int x){Braver.level+=x; notify();}
-    void change_hp(int x){Braver.hp+=x; notify();}
-    void change_atk(int x){Braver.atk+=x; notify();}
-    void change_pdef(int x){Braver.pdef+=x; notify();}
-    void change_pos_x(int x, int face){Braver.pos_x+=x; Braver.face = face; notify();}
-    void change_pos_y(int x, int face){Braver.pos_y+=x; Braver.face = face; notify();}
-    void change_floor(int x){Braver.floor+=x; notify();}
-    void change_exp(int x){Braver.exp+=x; notify();}
-    void change_gold(int x){Braver.gold+=x; notify();}
+    void change_status(int x){Braver->status+=x; notify();}
+    void change_level(int x){Braver->level+=x; notify();}
+    void change_hp(int x){Braver->hp+=x; notify();}
+    void change_atk(int x){Braver->atk+=x; notify();}
+    void change_pdef(int x){Braver->pdef+=x; notify();}
+    void change_pos_x(int x, int face){Braver->pos_x+=x; Braver->face = face; notify();}
+    void change_pos_y(int x, int face){Braver->pos_y+=x; Braver->face = face; notify();}
+    void change_floor(int x){Braver->floor+=x; notify();}
+    void change_exp(int x){Braver->exp+=x; notify();}
+    void change_gold(int x){Braver->gold+=x; notify();}
     void change_key1(int x){
-        Braver.key1+=x;
+        Braver->key1+=x;
         notify();
     }
     void change_key2(int x){
-        Braver.key2+=x;
+        Braver->key2+=x;
         notify();
     }
     void change_key3(int x){
-        Braver.key3+=x;
+        Braver->key3+=x;
         notify();
     }
-    void change_face(int x){Braver.face=x; notify();}
-    void clear_floor() {Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] = 0; notify();}
+    void change_face(int x){Braver->face=x; notify();}
+    void clear_floor() {Tower[Braver->floor][Braver->pos_y * X + Braver->pos_x] = 0; notify();}
 
     int get_end_no(){return Vars.end_no;} //结局编号
     int get_dialog_no(){return Vars.dialog_no;} //对话编号
@@ -81,6 +86,12 @@ public:
 
     void set_update_display_data_notification(std::shared_ptr<Notification> notification);
     void notify();
+
+    void init_monsters();
+    void init_tower();
+
+    std::shared_ptr<BRAVER> get_braver() {return Braver;}
+    std::shared_ptr<FLOOR*> get_tower() {return Tower_ptr;}
 };
 
 #endif // MODEL_H

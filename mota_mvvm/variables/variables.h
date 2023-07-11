@@ -74,13 +74,10 @@ public:
     GLOBAL_VARS();
 };
 
-extern BRAVER Braver;
-extern MONSTER Monster[MONSTER_NUM];
-extern GLOBAL_VARS Vars;
+//extern BRAVER Braver;
+//extern MONSTER Monster[MONSTER_NUM];
+//extern GLOBAL_VARS Vars;
 
-extern FLOOR Tower[TOTAL_FLOOR];
-
-void init_monsters(); //初始化全局变量
-void init_tower();
+//extern FLOOR Tower[TOTAL_FLOOR];
 
 #endif // VARIABLES_H

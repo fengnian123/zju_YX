@@ -84,19 +84,17 @@ View::~View()
 
 void View::GameStart()
 {
-    init_tower();
-    init_monsters();
-    Braver = BRAVER();
     Vars = GLOBAL_VARS();
     LoadImageBeforeGame();
     InitGraphics();
     DisplayData();
-    DisplayFloor(Braver.floor);
+    DisplayFloor(Braver->floor);
 }
 
 void View::update(){
+    std::cout << Braver->pos_x << " " << Braver->pos_y << std::endl;
     DisplayData();
-    DisplayFloor(Braver.floor);
+    DisplayFloor(Braver->floor);
 }
 
 void View::set_fight_command(std::shared_ptr<Command> command)
@@ -146,6 +144,14 @@ void View::set_move_right_command(std::shared_ptr<Command> command)
 
 std::shared_ptr<Notification> View::get_update_view_notification(){
     return update_view_notification;
+}
+
+void View::set_braver(std::shared_ptr<BRAVER> x){
+    Braver = x;
+}
+
+void View::set_tower(std::shared_ptr<FLOOR*> x){
+    Tower = x;
 }
 
 void View::HideFightWindow()
@@ -261,16 +267,16 @@ void View::DisplayData()
 //    default:
 //        ui->label_8->setText(QString::fromWCharArray(L"正常"));
 //    }
-    ui->label_9->setText(QString::number(Braver.level));
-    ui->label_10->setText(QString::number(Braver.hp));
-    ui->label_11->setText(QString::number(Braver.atk));
-    ui->label_12->setText(QString::number(Braver.pdef));
-    ui->label_13->setText(QString::number(Braver.exp));
-    ui->label_7->setText(QString::number(Braver.key1));
-    ui->label_14->setText(QString::number(Braver.key2));
-    ui->label_15->setText(QString::number(Braver.key3));
-    ui->label_16->setText(QString::number(Braver.gold));
-    ui->label_17->setText(QString::fromWCharArray(L"第 ") + QString::number(Braver.floor + 1) + QString::fromWCharArray(L" 层"));
+    ui->label_9->setText(QString::number(Braver->level));
+    ui->label_10->setText(QString::number(Braver->hp));
+    ui->label_11->setText(QString::number(Braver->atk));
+    ui->label_12->setText(QString::number(Braver->pdef));
+    ui->label_13->setText(QString::number(Braver->exp));
+    ui->label_7->setText(QString::number(Braver->key1));
+    ui->label_14->setText(QString::number(Braver->key2));
+    ui->label_15->setText(QString::number(Braver->key3));
+    ui->label_16->setText(QString::number(Braver->gold));
+    ui->label_17->setText(QString::fromWCharArray(L"第 ") + QString::number(Braver->floor + 1) + QString::fromWCharArray(L" 层"));
 }
 
 void View::DisplayFloor(int floor)
@@ -280,18 +286,18 @@ void View::DisplayFloor(int floor)
     scene_floor->clear();
     for(y = 0; y <= 10; y++){
         for(x = 0; x <= 10; x++){
-            if (Braver.pos_x == x && Braver.pos_y == y)
+            if (Braver->pos_x == x && Braver->pos_y == y)
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 if (keyUpCnt <= 1)
-                    pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBraver[Braver.face][1]));
+                    pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBraver[Braver->face][1]));
                 else
-                    pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBraver[Braver.face][0]));
+                    pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBraver[Braver->face][0]));
                 pixmap_items[item_it]->setPos(QPointF(32 * x, 32 * y));
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 0 && y * Braver.pos_x + x == OpenDoorTargetPos)
+            else if ((*Tower)[floor][y * X + x] == 0 && y * Braver->pos_x + x == OpenDoorTargetPos)
             {
                 if (OpenDoorTempData == 21) //正在被打开的黄门
                 {
@@ -342,7 +348,7 @@ void View::DisplayFloor(int floor)
                     item_it++;
                 }
             }
-            else if (Tower[floor][y * X + x] == 1) //墙
+            else if ((*Tower)[floor][y * X + x] == 1) //墙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgWall));
@@ -350,7 +356,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 11 || Tower[floor][y * X + x] == 12) //下楼
+            else if ((*Tower)[floor][y * X + x] == 11 || (*Tower)[floor][y * X + x] == 12) //下楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgDownstairs));
@@ -358,7 +364,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 10 || Tower[floor][y * X + x] == 14) //上楼
+            else if ((*Tower)[floor][y * X + x] == 10 || (*Tower)[floor][y * X + x] == 14) //上楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgUpstairs));
@@ -366,7 +372,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 21) //门
+            else if ((*Tower)[floor][y * X + x] == 21) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgYDoor[0]));
@@ -374,7 +380,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 22) //门
+            else if ((*Tower)[floor][y * X + x] == 22) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBDoor[0]));
@@ -382,7 +388,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 23) //门
+            else if ((*Tower)[floor][y * X + x] == 23) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRDoor[0]));
@@ -390,7 +396,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 24) //门
+            else if ((*Tower)[floor][y * X + x] == 24) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgGDoor[0]));
@@ -398,7 +404,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 25) //门
+            else if ((*Tower)[floor][y * X + x] == 25) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgIDoor[0]));
@@ -406,7 +412,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 26) //门
+            else if ((*Tower)[floor][y * X + x] == 26) //门
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgFalseWall[0]));
@@ -414,7 +420,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 31) //黄钥匙
+            else if ((*Tower)[floor][y * X + x] == 31) //黄钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgYKey));
@@ -422,7 +428,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 32) //蓝钥匙
+            else if ((*Tower)[floor][y * X + x] == 32) //蓝钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBKey));
@@ -430,7 +436,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 33) //红钥匙
+            else if ((*Tower)[floor][y * X + x] == 33) //红钥匙
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRKey));
@@ -438,7 +444,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 34) //小血瓶
+            else if ((*Tower)[floor][y * X + x] == 34) //小血瓶
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBottle1));
@@ -446,7 +452,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 35) //大血瓶
+            else if ((*Tower)[floor][y * X + x] == 35) //大血瓶
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBottle2));
@@ -454,7 +460,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 36) //红宝石
+            else if ((*Tower)[floor][y * X + x] == 36) //红宝石
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgRGem));
@@ -462,7 +468,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 37) //蓝宝石
+            else if ((*Tower)[floor][y * X + x] == 37) //蓝宝石
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgBGem));
@@ -470,7 +476,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 38) //铁剑
+            else if ((*Tower)[floor][y * X + x] == 38) //铁剑
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgSword));
@@ -478,7 +484,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 39) //铁盾
+            else if ((*Tower)[floor][y * X + x] == 39) //铁盾
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgShield));
@@ -486,7 +492,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 41) //商店左端
+            else if ((*Tower)[floor][y * X + x] == 41) //商店左端
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgStoreLeft));
@@ -494,7 +500,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 42) //商店中间
+            else if ((*Tower)[floor][y * X + x] == 42) //商店中间
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgStoreMiddle[display_it]));
@@ -502,7 +508,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 43) //商店右端
+            else if ((*Tower)[floor][y * X + x] == 43) //商店右端
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgStoreRight));
@@ -510,7 +516,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 45 || Tower[floor][y * X + x] == 48 || Tower[floor][y * X + x] == 50) //NPC
+            else if ((*Tower)[floor][y * X + x] == 45 || (*Tower)[floor][y * X + x] == 48 || (*Tower)[floor][y * X + x] == 50) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcRed[display_it]));
@@ -518,7 +524,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 46) //NPC
+            else if ((*Tower)[floor][y * X + x] == 46) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcThief[display_it]));
@@ -526,7 +532,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] == 47 || Tower[floor][y * X + x] == 49 || Tower[floor][y * X + x] == 44) //NPC
+            else if ((*Tower)[floor][y * X + x] == 47 || (*Tower)[floor][y * X + x] == 49 || (*Tower)[floor][y * X + x] == 44) //NPC
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgNpcOld[display_it]));
@@ -534,10 +540,10 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if (Tower[floor][y * X + x] >= 51 && Tower[floor][y * X + x] <= 50 + MONSTER_NUM) //怪物
+            else if ((*Tower)[floor][y * X + x] >= 51 && (*Tower)[floor][y * X + x] <= 50 + MONSTER_NUM) //怪物
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
-                pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgMonsters[Tower[floor][y * X + x] - 51][display_it]));
+                pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgMonsters[(*Tower)[floor][y * X + x] - 51][display_it]));
                 pixmap_items[item_it]->setPos(QPointF(32 * x,32 * y));
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
@@ -766,7 +772,7 @@ void View::keyPressEvent(QKeyEvent *event)
         keyUpCnt = 0;
         move_right_command->exec();
     }
-    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 31 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 32 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 33){
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 31 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 32 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 33){
         //捡钥匙背景音乐
         voice_key_pick->setSource(QUrl::fromLocalFile(":/music/gain-thing.wav"));
         voice_key_pick->setLoopCount(1);
@@ -774,7 +780,7 @@ void View::keyPressEvent(QKeyEvent *event)
         voice_key_pick->play();
         pick_key_command->exec();
     }
-    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 21 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 22 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 23){
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 21 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 22 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 23){
         //开门背景音乐
         voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
         voice_door_open->setLoopCount(1);
@@ -782,14 +788,14 @@ void View::keyPressEvent(QKeyEvent *event)
         voice_door_open->play();
         door_open_command->exec();
     }
-    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 10 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 11 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 12 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 14){
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 10 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 11 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 12 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 14){
         voice_item_pick->setSource(QUrl::fromLocalFile(":/music/floor-change.wav"));
         voice_item_pick->setLoopCount(1);
         voice_item_pick->setVolume(5.0f);
         voice_item_pick->play();
         floor_change_command->exec();
     }
-    if(Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 34 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 35 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 36 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 37 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 38 || Tower[Braver.floor][Braver.pos_y * X + Braver.pos_x] == 39){
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 34 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 35 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 36 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 37 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 38 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 39){
         //捡东西背景音乐
         voice_key_pick->setSource(QUrl::fromLocalFile(":/music/gain-yao.wav"));
         voice_key_pick->setLoopCount(1);
@@ -799,3 +805,278 @@ void View::keyPressEvent(QKeyEvent *event)
         pick_item_command->exec();
     }
 }
+
+void View::init_monsters(){
+    Monster[0].name = L"绿色史莱姆";
+    Monster[0].hp = 35;
+    Monster[0].atk = 18;
+    Monster[0].pdef = 1;
+    Monster[0].boss = false;
+    Monster[0].attrib = 0;
+    Monster[0].gold = 1;
+    Monster[0].exp = 0;
+    Monster[0].img = ":/Graphics/Characters/003-Monster01.png";
+    Monster[0].img_y = 0;
+
+    Monster[1].name = L"红色史莱姆";
+    Monster[1].hp = 45;
+    Monster[1].atk = 20;
+    Monster[1].pdef = 2;
+    Monster[1].boss = false;
+    Monster[1].attrib = 0;
+    Monster[1].gold = 2;
+    Monster[1].exp = 0;
+    Monster[1].img = ":/Graphics/Characters/003-Monster01.png";
+    Monster[1].img_y = 32;
+
+    Monster[2].name = L"骷髅士兵";
+    Monster[2].hp = 55;
+    Monster[2].atk = 52;
+    Monster[2].pdef = 12;
+    Monster[2].boss = false;
+    Monster[2].attrib = 0;
+    Monster[2].gold = 8;
+    Monster[2].exp = 0;
+    Monster[2].img = ":/Graphics/Characters/005-Monster03.png";
+    Monster[2].img_y = 32;
+
+    Monster[3].name = L"骷髅人";
+    Monster[3].hp = 50;
+    Monster[3].atk = 42;
+    Monster[3].pdef = 6;
+    Monster[3].boss = false;
+    Monster[3].attrib = 0;
+    Monster[3].gold = 6;
+    Monster[3].exp = 0;
+    Monster[3].img = ":/Graphics/Characters/005-Monster03.png";
+    Monster[3].img_y = 0;
+
+    Monster[4].name = L"小蝙蝠";
+    Monster[4].hp = 35;
+    Monster[4].atk = 38;
+    Monster[4].pdef = 3;
+    Monster[4].boss = false;
+    Monster[4].attrib = 0;
+    Monster[4].gold = 3;
+    Monster[4].exp = 0;
+    Monster[4].img = ":/Graphics/Characters/004-Monster02.png";
+    Monster[4].img_y = 0;
+
+    Monster[5].name = L"初级法师";
+    Monster[5].hp = 60;
+    Monster[5].atk = 32;
+    Monster[5].pdef = 8;
+    Monster[5].boss = false;
+    Monster[5].attrib = 0;
+    Monster[5].gold = 5;
+    Monster[5].exp = 0;
+    Monster[5].img = ":/Graphics/Characters/007-Monster05.png";
+    Monster[5].img_y = 0;
+
+    Monster[6].name = L"中级卫兵";
+    Monster[6].hp = 100;
+    Monster[6].atk = 180;
+    Monster[6].pdef = 110;
+    Monster[6].boss = false;
+    Monster[6].attrib = 0;
+    Monster[6].gold = 50;
+    Monster[6].exp = 0;
+    Monster[6].img = ":/Graphics/Characters/008-Monster06.png";
+    Monster[6].img_y = 32;
+
+    Monster[7].name = L"初级卫兵";
+    Monster[7].hp = 50;
+    Monster[7].atk = 48;
+    Monster[7].pdef = 22;
+    Monster[7].boss = false;
+    Monster[7].attrib = 0;
+    Monster[7].gold = 12;
+    Monster[7].exp = 0;
+    Monster[7].img = ":/Graphics/Characters/008-Monster06.png";
+    Monster[7].img_y = 0;
+
+    Monster[8].name = L"骷髅队长";
+    Monster[8].hp = 100;
+    Monster[8].atk = 65;
+    Monster[8].pdef = 15;
+    Monster[8].boss = false;
+    Monster[8].attrib = 0;
+    Monster[8].gold = 30;
+    Monster[8].exp = 0;
+    Monster[8].img = ":/Graphics/Characters/005-Monster03.png";
+    Monster[8].img_y = 64;
+
+    Monster[9].name = L"魔法警卫";
+    Monster[9].hp = 230;
+    Monster[9].atk = 450;
+    Monster[9].pdef = 100;
+    Monster[9].boss = false;
+    Monster[9].attrib = 0;
+    Monster[9].gold = 100;
+    Monster[9].exp = 0;
+    Monster[9].img = ":/Graphics/Characters/010-Monster08.png";
+    Monster[9].img_y = 32;
+
+    Monster[10].name = L"假魔王";
+    Monster[10].hp = 5000;
+    Monster[10].atk = 1580;
+    Monster[10].pdef = 190;
+    Monster[10].boss = false;
+    Monster[10].attrib = 0;
+    Monster[10].gold = 0;
+    Monster[10].exp = 0;
+    Monster[10].img = ":/Graphics/Characters/010-Monster08.png";
+    Monster[10].img_y = 0;
+}
+
+//void View::init_tower(){
+//    FLOOR tmpfloor_1 = {
+//        10, 0, 51, 52, 51, 0, 0, 0, 0, 0, 0,
+//        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+//        34, 0, 0, 21, 0, 1, 36, 31, 0, 1, 0,
+//        0, 54, 0, 1, 0, 1, 37, 34, 0, 1, 0,
+//        1, 21, 1, 1, 0, 1, 1, 1, 21, 1, 0,
+//        31, 0, 0, 1, 0, 21, 55, 56, 55, 1, 0,
+//        0, 53, 0, 1, 0, 1, 1, 1, 1, 1, 0,
+//        1, 21, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+//        0, 0, 0, 1, 1, 21, 1, 1, 1, 21, 1,
+//        34, 0, 31, 1, 31, 0, 0, 1, 0, 55, 0,
+//        34, 0, 31, 1, 0, 0, 0, 1, 31, 35, 31,
+//    };
+//    memcpy((*Tower)[0], tmpfloor_1, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_2 = {
+//        11, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0,
+//        0, 0, 1, 1, 0, 57, 0, 57, 0, 1, 1,
+//        0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+//        0, 1, 31, 31, 1, 0, 0, 0, 1, 0, 44,
+//        0, 1, 31, 0, 25, 0, 0, 0, 25, 0, 0,
+//        0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
+//        0, 1, 46, 0, 1, 0, 0, 0, 1, 0, 45,
+//        0, 1, 0, 0, 25, 0, 0, 0, 25, 0, 0,
+//        0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
+//        0, 1, 35, 35, 1, 0, 0, 0, 1, 0, 0,
+//        10, 1, 35, 0, 25, 0, 0, 0, 25, 0, 0,
+//    };
+//    memcpy((*Tower)[1], tmpfloor_2, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_3 = {
+//        31, 37, 1, 31, 35, 31, 1, 0, 1, 0, 35,
+//        0, 34, 1, 35, 31, 35, 1, 0, 21, 55, 0,
+//        56, 0, 1, 31, 32, 31, 1, 0, 1, 1, 1,
+//        21, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0,
+//        0, 0, 55, 0, 0, 0, 51, 0, 0, 0, 0,
+//        21, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1,
+//        54, 0, 1, 1, 0, 1, 1, 0, 1, 0, 34,
+//        0, 31, 1, 0, 0, 0, 1, 0, 21, 56, 31,
+//        34, 36, 1, 0, 13, 0, 1, 0, 1, 1, 1,
+//        1, 1, 1, 1, 0, 1, 1, 52, 1, 0, 0,
+//        11, 0, 0, 0, 0, 0, 1, 0, 21, 0, 10,
+//    };
+//    memcpy((*Tower)[2], tmpfloor_3, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_4 = {
+//        0, 32, 0, 1, 41, 42, 43, 1, 0, 47, 0,
+//        34, 0, 31, 1, 0, 0, 0, 1, 31, 0, 35,
+//        0, 0, 0, 1, 0, 0, 0, 1, 0, 53, 0,
+//        1, 21, 1, 1, 1, 22, 1, 1, 1, 21, 1,
+//        0, 55, 0, 21, 0, 52, 0, 0, 54, 0, 0,
+//        0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+//        52, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0,
+//        21, 1, 1, 21, 1, 1, 1, 21, 1, 1, 21,
+//        0, 1, 0, 55, 0, 1, 0, 56, 0, 1, 0,
+//        0, 1, 51, 0, 31, 1, 36, 0, 34, 1, 0,
+//        10, 1, 31, 51, 31, 1, 0, 51, 0, 1, 11,
+//    };
+//    memcpy((*Tower)[3], tmpfloor_4, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_5 = {
+//        10, 1, 0, 52, 21, 0, 1, 0, 0, 21, 0,
+//        0, 1, 0, 0, 1, 31, 1, 51, 51, 1, 52,
+//        0, 21, 55, 0, 1, 0, 1, 31, 31, 1, 0,
+//        1, 1, 1, 21, 1, 55, 1, 31, 31, 1, 0,
+//        31, 0, 56, 0, 1, 0, 1, 1, 1, 1, 0,
+//        31, 0, 0, 55, 1, 0, 51, 0, 0, 0, 0,
+//        1, 53, 1, 1, 1, 0, 1, 1, 1, 1, 52,
+//        0, 0, 0, 0, 1, 51, 1, 0, 0, 0, 0,
+//        37, 31, 34, 0, 1, 0, 1, 21, 1, 1, 1,
+//        1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0,
+//        11, 0, 0, 0, 0, 0, 1, 0, 26, 0, 38,
+//    };
+//    memcpy((*Tower)[4], tmpfloor_5, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_6 = {
+//        11, 1, 31, 31, 1, 0, 56, 0, 31, 51, 0,
+//        0, 1, 31, 31, 1, 0, 1, 1, 1, 1, 21,
+//        0, 1, 1, 52, 1, 0, 1, 34, 0, 54, 0,
+//        0, 21, 21, 0, 21, 0, 1, 48, 0, 0, 55,
+//        0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+//        0, 0, 52, 56, 0, 0, 0, 54, 53, 0, 0,
+//        1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
+//        56, 0, 0, 49, 1, 0, 21, 21, 0, 21, 0,
+//        0, 55, 0, 37, 1, 0, 1, 1, 52, 1, 52,
+//        21, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0,
+//        0, 51, 0, 0, 54, 0, 1, 34, 34, 1, 10,
+//    };
+//    memcpy((*Tower)[5], tmpfloor_6, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_7 = {
+//        10, 1, 36, 1, 0, 50, 0, 1, 31, 1, 51,
+//        0, 1, 34, 1, 0, 0, 0, 1, 31, 1, 52,
+//        0, 1, 55, 1, 52, 1, 53, 1, 34, 1, 51,
+//        0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+//        21, 1, 21, 1, 22, 1, 21, 1, 54, 1, 21,
+//        0, 53, 0, 56, 0, 0, 0, 0, 0, 0, 0,
+//        21, 1, 21, 1, 21, 1, 21, 1, 53, 1, 21,
+//        0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+//        0, 1, 0, 1, 55, 1, 52, 1, 35, 1, 0,
+//        51, 1, 51, 1, 31, 1, 56, 1, 31, 1, 0,
+//        0, 52, 0, 1, 31, 1, 35, 1, 31, 1, 11,
+//    };
+//    memcpy((*Tower)[6], tmpfloor_7, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_8 = {
+//        11, 0, 21, 21, 0, 10, 0, 1, 31, 0, 31,
+//        0, 0, 1, 1, 0, 0, 51, 1, 0, 33, 0,
+//        21, 1, 1, 1, 1, 21, 1, 1, 35, 0, 34,
+//        0, 1, 31, 31, 31, 0, 0, 1, 1, 24, 1,
+//        34, 1, 1, 1, 1, 1, 56, 1, 58, 0, 58,
+//        0, 52, 51, 52, 0, 1, 0, 1, 0, 0, 0,
+//        1, 1, 1, 1, 21, 1, 55, 1, 1, 21, 1,
+//        0, 0, 0, 55, 0, 54, 0, 56, 0, 0, 0,
+//        21, 1, 1, 1, 1, 1, 1, 1, 1, 1, 21,
+//        51, 0, 1, 36, 31, 1, 32, 34, 1, 0, 54,
+//        0, 55, 22, 31, 37, 1, 31, 0, 21, 53, 0,
+//    };
+//    memcpy((*Tower)[7], tmpfloor_8, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_9 = {
+//        0, 0, 54, 21, 0, 11, 0, 21, 51, 0, 34,
+//        0, 31, 0, 1, 0, 0, 0, 1, 0, 51, 0,
+//        53, 1, 1, 1, 1, 22, 1, 1, 1, 1, 0,
+//        0, 31, 0, 1, 31, 0, 31, 21, 21, 0, 0,
+//        37, 0, 55, 21, 0, 36, 0, 1, 1, 26, 1,
+//        1, 1, 1, 1, 1, 1, 52, 1, 0, 0, 53,
+//        31, 0, 21, 53, 31, 1, 0, 1, 39, 1, 0,
+//        53, 0, 1, 0, 0, 1, 0, 1, 1, 1, 21,
+//        21, 1, 1, 1, 21, 1, 0, 1, 31, 0, 56,
+//        0, 34, 1, 0, 54, 1, 55, 1, 0, 54, 0,
+//        10, 0, 22, 0, 0, 21, 0, 21, 56, 0, 34,
+//    };
+//    memcpy((*Tower)[8], tmpfloor_9, sizeof(int) * X * Y);
+
+//    FLOOR tmpfloor_10 = {
+//        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//        1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+//        54, 54, 54, 1, 1, 0, 1, 1, 54, 54, 54,
+//        0, 53, 0, 24, 0, 59, 0, 24, 0, 53, 0,
+//        1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+//        54, 37, 54, 1, 1, 0, 1, 1, 54, 36, 54,
+//        0, 53, 0, 1, 1, 0, 1, 1, 0, 53, 0,
+//        0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0,
+//        21, 1, 21, 1, 1, 23, 1, 1, 21, 1, 21,
+//        0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
+//        11, 1, 0, 56, 0, 14, 0, 56, 0, 1, 35,
+//    };
+//    memcpy((*Tower)[9], tmpfloor_10, sizeof(int) * X * Y);
+//}
