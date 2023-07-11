@@ -1,9 +1,9 @@
 #ifndef FIGHT_COMMAND_H
 #define FIGHT_COMMAND_H
 
-#include "command.h"
+#include "command/command.h"
 #include <memory>
-
+class ViewModel;
 class FightCommand : public Command{
 private:
     std::shared_ptr<ViewModel> viewmodel;

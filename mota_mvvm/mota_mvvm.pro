@@ -14,26 +14,35 @@ SOURCES += \
     main.cpp \
     view/view.cpp \
     app/app.cpp \
+    viewmodel/dialog_command.cpp \
+    viewmodel/door_open_command.cpp \
+    viewmodel/fight_command.cpp \
+    viewmodel/floor_change_command.cpp \
+    viewmodel/move_down_command.cpp \
+    viewmodel/move_left_command.cpp \
+    viewmodel/move_right_command.cpp \
+    viewmodel/move_up_command.cpp \
+    viewmodel/pick_item_command.cpp \
+    viewmodel/pick_key_command.cpp \
     viewmodel/viewmodel.cpp \
     model/model.cpp \
     command/command.cpp \
     notification/notification.cpp \
     variables/variables.cpp \
-    command/fight_command.cpp \
-    command/pick_key_command.cpp \
-    command/door_open_command.cpp \
-    command/floor_change_command.cpp \
-    command/dialog_command.cpp \
-    command/move_up_command.cpp \
-    command/move_down_command.cpp \
-    command/move_left_command.cpp \
-    command/move_right_command.cpp \
-    command/pick_item_command.cpp
 
 HEADERS += \
-    total.h \
     view/view.h \
     app/app.h \
+    viewmodel/dialog_command.h \
+    viewmodel/door_open_command.h \
+    viewmodel/fight_command.h \
+    viewmodel/floor_change_command.h \
+    viewmodel/move_down_command.h \
+    viewmodel/move_left_command.h \
+    viewmodel/move_right_command.h \
+    viewmodel/move_up_command.h \
+    viewmodel/pick_item_command.h \
+    viewmodel/pick_key_command.h \
     viewmodel/viewmodel.h \
     model/model.h \
     command/command.h \

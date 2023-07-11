@@ -2,7 +2,7 @@
 #define COMMAND_H
 #include <string>
 #include <memory>
-class ViewModel;
+
 
 class Command
 {

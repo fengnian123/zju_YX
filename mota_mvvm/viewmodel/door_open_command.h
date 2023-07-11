@@ -1,9 +1,9 @@
 #ifndef DOOR_OPEN_COMMAND_H
 #define DOOR_OPEN_COMMAND_H
 
-#include "command.h"
+#include "command/command.h"
 #include <memory>
-
+class ViewModel;
 class DoorOpenCommand : public Command{
 private:
     std::shared_ptr<ViewModel> viewmodel;

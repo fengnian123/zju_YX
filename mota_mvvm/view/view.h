@@ -13,6 +13,7 @@
 #include "variables/variables.h"
 #include <QGraphicsScene>
 #include <QSoundEffect>
+#include "notification/notification.h"
 class Notification;
 namespace Ui {
 class View;
@@ -42,6 +43,11 @@ public:
     std::shared_ptr<Notification> get_update_view_notification();
 
     void LoadImageBeforeGame();
+    void HideFightWindow();
+    void init_monsters();
+    //void init_tower();
+    void set_braver(std::shared_ptr<BRAVER> x);
+    void set_tower(std::shared_ptr<FLOOR*> x);
 public slots:
 //    void OnNormalTimerTriggered();
 //    void OnOpenDoorTimerTriggered();
@@ -122,6 +128,19 @@ private:
     std::shared_ptr<Command> move_right_command;
     std::shared_ptr<Notification> update_view_notification;
 
-    void HideFightWindow();
+    std::shared_ptr<BRAVER> Braver;
+    MONSTER Monster[MONSTER_NUM];
+    GLOBAL_VARS Vars;
+    std::shared_ptr<FLOOR*> Tower;
+};
+
+class UpdateViewNotification: public Notification{
+private:
+    std::shared_ptr<View> view;
+public:
+    UpdateViewNotification(std::shared_ptr<View> v):view(v){}
+    void exec(){
+        view->update();
+    }
 };
 #endif // MAINWINDOW_H

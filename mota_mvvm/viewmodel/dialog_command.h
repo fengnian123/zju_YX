@@ -1,9 +1,9 @@
 #ifndef DIALOG_COMMAND_H
 #define DIALOG_COMMAND_H
 
-#include "command.h"
+#include "command/command.h"
 #include <memory>
-
+class ViewModel;
 class DialogCommand : public Command{
 private:
     std::shared_ptr<ViewModel> viewmodel;

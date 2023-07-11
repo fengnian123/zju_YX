@@ -3,10 +3,10 @@
 #include "model/model.h"
 #include <memory>
 #include "command/command.h"
+#include "notification/notification.h"
 
 class Model;
 class Notification;
-class ViewModelNotification;
 class Command;
 
 class ViewModel
@@ -28,6 +28,8 @@ private:
 
     std::shared_ptr<Notification> update_view_notification;
 
+    std::shared_ptr<BRAVER> Braver;
+    std::shared_ptr<FLOOR*> Tower;
 public:
     ViewModel();
     void bind(std::shared_ptr<Model> model);
@@ -54,6 +56,20 @@ public:
     std::shared_ptr<Command> get_move_up_command();
     std::shared_ptr<Command> get_move_left_command();
     std::shared_ptr<Command> get_move_right_command();
+    std::shared_ptr<BRAVER> get_braver();
+    std::shared_ptr<FLOOR*> get_tower();
+    void set_braver(std::shared_ptr<BRAVER> x);
+    void set_tower(std::shared_ptr<FLOOR*> x);
+};
+
+class UpdateDisplayDataNotification: public Notification{
+private:
+    std::shared_ptr<ViewModel> viewmodel;
+public:
+    UpdateDisplayDataNotification(std::shared_ptr<ViewModel> vm):viewmodel(vm){}
+    void exec(){
+        viewmodel->notified();
+    }
 };
 
 #endif // VIEWMODEL_H

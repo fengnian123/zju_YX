@@ -23,6 +23,13 @@ App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
 
     viewmodel->set_update_view_notification(view->get_update_view_notification());
     model->set_update_display_data_notification(viewmodel->get_update_display_data_notification());
+
+    view->set_braver(viewmodel->get_braver());
+    view->set_tower(viewmodel->get_tower());
+
+    model->init_tower();
+    model->init_monsters();
+    view->init_monsters();
     view->GameStart();
 }
 
