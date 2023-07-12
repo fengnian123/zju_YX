@@ -48,12 +48,13 @@ public:
     //void init_tower();
     void set_braver(std::shared_ptr<BRAVER> x);
     void set_tower(std::shared_ptr<FLOOR*> x);
+    int handle_keypress(int key_no, int& target_pos, int& old_data);
 public slots:
-//    void OnNormalTimerTriggered();
-//    void OnOpenDoorTimerTriggered();
-//    void OnCutTimerTriggered();
-//    void OnFightTimerTriggered();
-//    void OnGainItemTimerTriggered();
+    void OnNormalTimerTriggered();
+    void OnOpenDoorTimerTriggered();
+    void OnCutTimerTriggered();
+    void OnFightTimerTriggered();
+    void OnGainItemTimerTriggered();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -104,11 +105,13 @@ private:
     int OldFloor;
     int keyUpCnt; //按键松开的时间
     int x,y;//位置
-//    QTimer* NormalTimer; //层内动态效果的定时器
-//    QTimer* OpenDoorTimer; //播放开门动画的定时器
-//    QTimer* CutTimer; //转场动画的计时器
-//    QTimer* FightTimer; //战斗的计时器
-//    QTimer* GainItemTimer; //获得物品的计时器
+    int target_pos;
+    int old_data;
+    QTimer* NormalTimer; //层内动态效果的定时器
+    QTimer* OpenDoorTimer; //播放开门动画的定时器
+    QTimer* CutTimer; //转场动画的计时器
+    QTimer* FightTimer; //战斗的计时器
+    QTimer* GainItemTimer; //获得物品的计时器
 
     QGraphicsScene *scene_m;
     QGraphicsScene *scene_b;
