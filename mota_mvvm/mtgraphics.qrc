@@ -77,5 +77,7 @@
         <file>music/pianfu.wav</file>
         <file>music/quxiao.wav</file>
         <file>music/store.wav</file>
+        <file>music/fight.wav</file>
+        <file>music/jianji.wav</file>
     </qresource>
 </RCC>

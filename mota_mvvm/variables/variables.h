@@ -70,7 +70,7 @@ public:
     int BuyTimes; //商店买的次数
     bool BuyKeyInFloor6; //是否在六层买过蓝钥匙
     bool BuyKeyInFloor7; //是否在七层买过黄钥匙
-    bool CutInFloor3; //3层被打的转场
+    int CutInFloor3;
     GLOBAL_VARS();
 };
 

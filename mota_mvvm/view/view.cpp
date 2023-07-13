@@ -95,12 +95,31 @@ void View::update(){
         DisplayData();
         DisplayFloor(Braver->floor);
     }
+
     else if (Vars.OperationStatus == 3)
     { //正在开门 播放开门动画之后恢复为正常情况
         OpenDoorTimer->start(100);
         OpenDoorTargetPos = target_pos;
         OpenDoorTempData = old_data;
         DisplayFloor(Braver->floor);
+    }
+    else if (Vars.OperationStatus == 4)
+    {
+        // 上下楼转场
+        NormalTimer->stop();
+        CutTimer->start(100);
+    }
+    else if (Vars.OperationStatus == 5){
+        //战斗
+        DisplayData();
+        FightTargetPos = target_pos;
+        FightTimer->start(200);
+    }
+    else if (Vars.OperationStatus == 6)
+    {
+        //获得物品时显示内容
+        DisplayData();
+        GainItemTimer->start(200);
     }
 }
 
@@ -590,13 +609,13 @@ void View::OnOpenDoorTimerTriggered()
 
 void View::OnCutTimerTriggered()
 {
-    if (Vars.CutInFloor3 == false)
+    if (1)
     {
         if (updown_it <= 3)
         {
             updown_it += 1;
             ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
-            DisplayFloor(OldFloor);
+            //DisplayFloor(OldFloor);
         }else if (updown_it <= 7){
             DisplayData();
             updown_it += 1;
@@ -610,43 +629,6 @@ void View::OnCutTimerTriggered()
             DisplayFloor(Braver->floor);
             NormalTimer->start(200);
         }
-    }else{
-        if (updown_it <= 3)
-        {
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number(updown_it * 64) + ");");
-            DisplayFloor(2);
-        }
-        else if (updown_it <= 7){
-            updown_it += 1;
-        }else if (updown_it == 8){
-            CutTimer->stop();
-            QMessageBox::about(this, "Hint", QString::fromStdWString(L" ----- 喂！醒醒！"));
-            (*Tower)[2][6 * X + 4] = 0;
-            (*Tower)[2][7 * X + 4] = 0;
-            (*Tower)[2][8 * X + 3] = 0;
-            (*Tower)[2][8 * X + 4] = 0;
-            (*Tower)[2][8 * X + 5] = 0;
-            (*Tower)[2][9 * X + 4] = 0;
-            Braver->floor = 1;
-            Braver->pos_x = 2;
-            Braver->pos_y = 7;
-            CutTimer->start();
-            updown_it += 1;
-        }else if (updown_it <= 12){
-            DisplayData();
-            updown_it += 1;
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0," + QString::number((13 - updown_it) * 64) + ");");
-            DisplayFloor(Braver->floor);
-        }else {
-            updown_it = 0;
-            Vars.OperationStatus = 0;
-            CutTimer->stop();
-            ui->graphicsView_9->setStyleSheet("background-color:rgba(0,0,0,0);");
-            DisplayFloor(Braver->floor);
-            Vars.CutInFloor3 = false;
-            NormalTimer->start(200);
-        }
     }
 }
 
@@ -654,7 +636,10 @@ void View::OnFightTimerTriggered()
 {
     if (fight_period_it == 0)
     {
+        Braver->hp += ((*Monster)[MonsterIDTemp].hp-1) / (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * ((*Monster)[MonsterIDTemp].atk - Braver->pdef);
+        cout<<"bra"<<Braver->hp<<endl;
         //准备战斗界面
+        cout<<Braver->hp<<endl;
         ui->label_20->setText(QString::number((*Monster)[MonsterIDTemp].hp));
         ui->label_22->setText(QString::number((*Monster)[MonsterIDTemp].atk));
         ui->label_24->setText(QString::number((*Monster)[MonsterIDTemp].pdef));
@@ -711,16 +696,11 @@ void View::OnFightTimerTriggered()
             fight_end_it++;
         }
         else if(fight_end_it == 3){
-            //结算战斗结果
-            int damage=0 ;//之后改
-            Braver->hp -= damage;
-            Braver->gold += (*Monster)[MonsterIDTemp].gold;
-            Braver->exp += (*Monster)[MonsterIDTemp].exp;
-            (*Tower)[Braver->floor][FightTargetPos] = 0;
             //隐藏战斗界面
             HideFightWindow();
             ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number((*Monster)[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number((*Monster)[MonsterIDTemp].gold));
             ui->label_34->show();
+            Braver->hp -= ((*Monster)[MonsterIDTemp].hp-1) / (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * ((*Monster)[MonsterIDTemp].atk - Braver->pdef);
             DisplayData();
             fight_end_it++;
         }
@@ -764,7 +744,7 @@ void View::OnGainItemTimerTriggered()
 void View::keyPressEvent(QKeyEvent *event)
 {   target_pos = -1;
     old_data =-1;
-    if(event->key() == Qt::Key_Up){ //向上
+    if(event->key() == Qt::Key_Up && Vars.OperationStatus == 0){ //向上
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(1, target_pos, old_data);
         if (Vars.OperationStatus == 3){
@@ -775,8 +755,7 @@ void View::keyPressEvent(QKeyEvent *event)
         }
         move_up_command->exec();
     }
-
-    if(event->key() == Qt::Key_Down){ //向下
+    if(event->key() == Qt::Key_Down && Vars.OperationStatus == 0){ //向下
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(3, target_pos, old_data);
         if (Vars.OperationStatus == 3){
@@ -787,7 +766,7 @@ void View::keyPressEvent(QKeyEvent *event)
         }
         move_down_command->exec();
     }
-    if(event->key() == Qt::Key_Left){ //向左
+    if(event->key() == Qt::Key_Left && Vars.OperationStatus == 0){ //向左
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(0, target_pos, old_data);
         if (Vars.OperationStatus == 3){
@@ -798,7 +777,7 @@ void View::keyPressEvent(QKeyEvent *event)
         }
         move_left_command->exec();
     }
-    if(event->key() == Qt::Key_Right){ //向右
+    if(event->key() == Qt::Key_Right && Vars.OperationStatus == 0){ //向右
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(2, target_pos, old_data);
         if (Vars.OperationStatus == 3){
@@ -834,6 +813,15 @@ void View::keyPressEvent(QKeyEvent *event)
         pick_item_command->exec();
     }
     if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] <= 50 + MONSTER_NUM){
+        Vars.OperationStatus = 5;
+        //战斗背景音乐
+        MonsterIDTemp = (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] - 51;
+        int times = (*Monster)[MonsterIDTemp].hp / (Braver->atk - (*Monster)[MonsterIDTemp].pdef);
+        cout<<times<<endl;
+        voice_fight->setSource(QUrl::fromLocalFile(":/music/fight.wav"));
+        voice_fight->setLoopCount(times+1);
+        voice_fight->setVolume(5.0f);
+        voice_fight->play();
         fight_command->exec();
     }
 }
@@ -888,10 +876,10 @@ int View::handle_keypress(int key_no, int& target_pos, int& old_data)
 //        (*Tower)[2][8 * X + 5] = 60;
 //        (*Tower)[2][9 * X + 4] = 60;
 //        Vars.CutInFloor3 = true;
-        return 8;
+//        return 8;
     }else if ((*Tower)[Braver->floor][target_pos] == 14){
         Vars.hint_msg = L"11层之后的内容，还未制作完成。";
-        return 1;
+//        return 1;
     }else if ((*Tower)[Braver->floor][target_pos] == 21){
         //黄门
         return 3;
@@ -910,6 +898,9 @@ int View::handle_keypress(int key_no, int& target_pos, int& old_data)
     }else if ((*Tower)[Braver->floor][target_pos] == 26){
         //暗墙
         return 3;
+    }else if ((*Tower)[Braver->floor][target_pos] == 10 || (*Tower)[Braver->floor][target_pos] == 11){
+        //上下楼
+        return 4;
     }else if ((*Tower)[Braver->floor][target_pos] == 42){
         //商店处理
 //        Vars.store_no = 1;
