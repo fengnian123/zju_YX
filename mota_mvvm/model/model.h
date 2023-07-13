@@ -15,9 +15,10 @@ private:
     GLOBAL_VARS Vars;
     std::shared_ptr<BRAVER> Braver;
     std::shared_ptr<FLOOR*> Tower_ptr;
+    std::shared_ptr<MONSTER*> Monster_ptr;
     FLOOR Tower[TOTAL_FLOOR];
 public:
-    Model() : Braver(std::make_shared<BRAVER>()), Tower_ptr(std::make_shared<FLOOR*>(Tower)) {}
+    Model() : Braver(std::make_shared<BRAVER>()), Tower_ptr(std::make_shared<FLOOR*>(Tower)), Monster_ptr(std::make_shared<MONSTER*>(Monster)) {}
     int get_status(){return Braver->status;}
     int get_level(){return Braver->level;}
     int get_hp(){return Braver->hp;}
@@ -56,7 +57,7 @@ public:
         notify();
     }
     void change_face(int x){Braver->face=x; notify();}
-    void clear_floor() {Tower[Braver->floor][Braver->pos_y * X + Braver->pos_x] = 0; notify();}
+    void clear_floor(int pos) {Tower[Braver->floor][pos] = 0; notify();}
 
     int get_end_no(){return Vars.end_no;} //结局编号
     int get_dialog_no(){return Vars.dialog_no;} //对话编号
@@ -90,8 +91,11 @@ public:
     void init_monsters();
     void init_tower();
 
+    int calc_damage(int pos);
+
     std::shared_ptr<BRAVER> get_braver() {return Braver;}
     std::shared_ptr<FLOOR*> get_tower() {return Tower_ptr;}
+    std::shared_ptr<MONSTER*> get_monster() {return Monster_ptr;}
 };
 
 #endif // MODEL_H

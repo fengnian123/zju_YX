@@ -12,6 +12,16 @@ void Model::notify(){
     update_display_data_notification->exec();
 }
 
+int Model::calc_damage(int pos){
+    if (Tower[Braver->floor][pos] >= 51 && Tower[Braver->floor][pos] <= 50 + MONSTER_NUM){
+        int monster_id = Tower[Braver->floor][pos] - 51;
+        int braver_damage = Braver->atk - Monster[monster_id].pdef;
+        int monster_damage = Monster[monster_id].atk - Braver->pdef;
+        return ((Monster[monster_id].hp - 1) / braver_damage) * monster_damage;
+    }
+    return 0;
+}
+
 void Model::init_monsters(){
     Monster[0].name = L"绿色史莱姆";
     Monster[0].hp = 35;
@@ -286,3 +296,4 @@ void Model::init_tower(){
     };
     memcpy(Tower[9], tmpfloor_10, sizeof(int) * X * Y);
 }
+

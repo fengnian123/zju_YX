@@ -2,7 +2,6 @@ release/main.o
 release/view.o
 release/app.o
 release/dialog_command.o
-release/door_open_command.o
 release/fight_command.o
 release/floor_change_command.o
 release/move_down_command.o

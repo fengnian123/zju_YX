@@ -14,7 +14,6 @@ class ViewModel
 private:
     std::shared_ptr<Model> mod;
     std::shared_ptr<Command> dialog_command;
-    std::shared_ptr<Command> door_open_command;
     std::shared_ptr<Command> fight_command;
     std::shared_ptr<Command> floor_change_command;
     std::shared_ptr<Command> pick_key_command;
@@ -30,6 +29,7 @@ private:
 
     std::shared_ptr<BRAVER> Braver;
     std::shared_ptr<FLOOR*> Tower;
+    std::shared_ptr<MONSTER*> Monster;
 public:
     ViewModel();
     void bind(std::shared_ptr<Model> model);
@@ -37,8 +37,7 @@ public:
     void set_update_view_notification(std::shared_ptr<Notification> notification);
     std::shared_ptr<Notification> get_update_display_data_notification();
     void exec_dialog_command(int x);
-    void exec_door_open_command();
-    void exec_fight_command(int hp, int exp, int gold);
+    void exec_fight_command();
     void exec_floor_change_command();
     void exec_pick_key_command();
     void exec_pick_item_command();
@@ -47,7 +46,6 @@ public:
     void exec_move_left_command();
     void exec_move_right_command();
     std::shared_ptr<Command> get_dialog_command();
-    std::shared_ptr<Command> get_door_open_command();
     std::shared_ptr<Command> get_fight_command();
     std::shared_ptr<Command> get_floor_change_command();
     std::shared_ptr<Command> get_pick_key_command();
@@ -58,8 +56,10 @@ public:
     std::shared_ptr<Command> get_move_right_command();
     std::shared_ptr<BRAVER> get_braver();
     std::shared_ptr<FLOOR*> get_tower();
+    std::shared_ptr<MONSTER*> get_monster();
     void set_braver(std::shared_ptr<BRAVER> x);
     void set_tower(std::shared_ptr<FLOOR*> x);
+    void set_monster(std::shared_ptr<MONSTER*> x);
 };
 
 class UpdateDisplayDataNotification: public Notification{

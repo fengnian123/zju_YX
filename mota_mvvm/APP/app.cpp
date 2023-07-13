@@ -12,7 +12,6 @@ App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
 
     view->set_fight_command(viewmodel->get_fight_command());
     view->set_pick_key_command(viewmodel->get_pick_key_command());
-    view->set_door_open_command(viewmodel->get_door_open_command());
     view->set_floor_change_command(viewmodel->get_floor_change_command());
     view->set_dialog_command(viewmodel->get_dialog_command());
     view->set_move_up_command(viewmodel->get_move_up_command());
@@ -26,10 +25,10 @@ App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
 
     view->set_braver(viewmodel->get_braver());
     view->set_tower(viewmodel->get_tower());
+    view->set_monster(viewmodel->get_monster());
 
     model->init_tower();
     model->init_monsters();
-    view->init_monsters();
     view->GameStart();
 }
 

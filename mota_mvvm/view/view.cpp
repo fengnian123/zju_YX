@@ -71,7 +71,7 @@ void View::LoadImageBeforeGame()
     }
     for (int t0 = 0; t0 <= MONSTER_NUM - 1; t0++){
         for (int t1 = 0; t1 <= 3; t1++){
-            ImgMonsters[t0][t1] = QImage(Monster[t0].img.c_str()).copy(t1 * 32, Monster[t0].img_y, 32, 32);
+            ImgMonsters[t0][t1] = QImage((*Monster)[t0].img.c_str()).copy(t1 * 32, (*Monster)[t0].img_y, 32, 32);
         }
     }
 }
@@ -98,7 +98,6 @@ void View::update(){
     else if (Vars.OperationStatus == 3)
     { //正在开门 播放开门动画之后恢复为正常情况
         OpenDoorTimer->start(100);
-        std::cout<<"tar:"<<target_pos<<"old:"<<old_data<<endl;
         OpenDoorTargetPos = target_pos;
         OpenDoorTempData = old_data;
         DisplayFloor(Braver->floor);
@@ -116,10 +115,6 @@ void View::set_pick_key_command(std::shared_ptr<Command> command)
 void View::set_pick_item_command(std::shared_ptr<Command> command)
 {
     pick_item_command = command;
-}
-void View::set_door_open_command(std::shared_ptr<Command> command)
-{
-    door_open_command = command;
 }
 void View::set_floor_change_command(std::shared_ptr<Command> command)
 {
@@ -160,6 +155,10 @@ void View::set_braver(std::shared_ptr<BRAVER> x){
 
 void View::set_tower(std::shared_ptr<FLOOR*> x){
     Tower = x;
+}
+
+void View::set_monster(std::shared_ptr<MONSTER*> x){
+    Monster = x;
 }
 
 void View::HideFightWindow()
@@ -305,10 +304,10 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-             if ((*Tower)[floor][y * X + x] == 0 && y * X + x == OpenDoorTargetPos)
+            if ((*Tower)[floor][y * X + x] == 0 && y * X + x == OpenDoorTargetPos)
             {
                 if (OpenDoorTempData == 21) //正在被打开的黄门
-                {   std::cout<<"in3"<<endl;
+                {
                     pixmap_items[item_it] = new QGraphicsPixmapItem;
                     pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgYDoor[opendoor_it]));
                     pixmap_items[item_it]->setPos(QPointF(32 * x,32 * y));
@@ -364,7 +363,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if ((*Tower)[floor][y * X + x] == 11 || (*Tower)[floor][y * X + x] == 12) //下楼
+            else if (((*Tower)[floor][y * X + x] == 11 || (*Tower)[floor][y * X + x] == 12) && !(Braver->pos_x == x && Braver->pos_y == y)) //下楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgDownstairs));
@@ -372,7 +371,7 @@ void View::DisplayFloor(int floor)
                 scene_floor->addItem(pixmap_items[item_it]);
                 item_it++;
             }
-            else if ((*Tower)[floor][y * X + x] == 10 || (*Tower)[floor][y * X + x] == 14) //上楼
+            else if (((*Tower)[floor][y * X + x] == 10 || (*Tower)[floor][y * X + x] == 14) && !(Braver->pos_x == x && Braver->pos_y == y)) //上楼
             {
                 pixmap_items[item_it] = new QGraphicsPixmapItem;
                 pixmap_items[item_it]->setPixmap(QPixmap::fromImage(ImgUpstairs));
@@ -573,12 +572,11 @@ void View::OnNormalTimerTriggered()
 }
 
 void View::OnOpenDoorTimerTriggered()
-{   std::cout<<"in"<<endl;
+{
     if (opendoor_it <= 2)
     {
         opendoor_it += 1;
         DisplayFloor(Braver->floor);
-        cout<<"123"<<endl;
     }
     else { //开门已经结束
         opendoor_it = 0;
@@ -657,9 +655,9 @@ void View::OnFightTimerTriggered()
     if (fight_period_it == 0)
     {
         //准备战斗界面
-        ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp));
-        ui->label_22->setText(QString::number(Monster[MonsterIDTemp].atk));
-        ui->label_24->setText(QString::number(Monster[MonsterIDTemp].pdef));
+        ui->label_20->setText(QString::number((*Monster)[MonsterIDTemp].hp));
+        ui->label_22->setText(QString::number((*Monster)[MonsterIDTemp].atk));
+        ui->label_24->setText(QString::number((*Monster)[MonsterIDTemp].pdef));
         ui->label_31->setText(QString::number(Braver->hp));
         ui->label_32->setText(QString::number(Braver->atk));
         ui->label_33->setText(QString::number(Braver->pdef));
@@ -692,19 +690,19 @@ void View::OnFightTimerTriggered()
         fight_period_it = 1;
     }else if (fight_period_it % 2 == 1 && fight_end_it == 0)
     {
-        if (Monster[MonsterIDTemp].hp - (Braver->atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1) <= 0)
+        if ((*Monster)[MonsterIDTemp].hp - (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1) <= 0)
         {
             ui->label_20->setText(QString::number(0));
             fight_end_it = 1;
         }else{
-            ui->label_20->setText(QString::number(Monster[MonsterIDTemp].hp - (Braver->atk - Monster[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1)));
+            ui->label_20->setText(QString::number((*Monster)[MonsterIDTemp].hp - (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * (fight_period_it / 2 + 1)));
             fight_period_it++;
         }
     }else if (fight_period_it % 2 == 0 && fight_end_it == 0)
     {
-        if (Monster[MonsterIDTemp].atk > Braver->pdef)
+        if ((*Monster)[MonsterIDTemp].atk > Braver->pdef)
         {
-            ui->label_31->setText(QString::number(Braver->hp - (Monster[MonsterIDTemp].atk - Braver->pdef) * (fight_period_it / 2)));
+            ui->label_31->setText(QString::number(Braver->hp - ((*Monster)[MonsterIDTemp].atk - Braver->pdef) * (fight_period_it / 2)));
         }
         fight_period_it++;
     }else{
@@ -716,12 +714,12 @@ void View::OnFightTimerTriggered()
             //结算战斗结果
             int damage=0 ;//之后改
             Braver->hp -= damage;
-            Braver->gold += Monster[MonsterIDTemp].gold;
-            Braver->exp += Monster[MonsterIDTemp].exp;
+            Braver->gold += (*Monster)[MonsterIDTemp].gold;
+            Braver->exp += (*Monster)[MonsterIDTemp].exp;
             (*Tower)[Braver->floor][FightTargetPos] = 0;
             //隐藏战斗界面
             HideFightWindow();
-            ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number(Monster[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number(Monster[MonsterIDTemp].gold));
+            ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number((*Monster)[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number((*Monster)[MonsterIDTemp].gold));
             ui->label_34->show();
             DisplayData();
             fight_end_it++;
@@ -766,49 +764,49 @@ void View::OnGainItemTimerTriggered()
 void View::keyPressEvent(QKeyEvent *event)
 {   target_pos = -1;
     old_data =-1;
-    int d_x = 0;
-    int d_y = 0;
-    if(event->key() == Qt::Key_Up){
-        d_y =-1;
-    }
-    if(event->key() == Qt::Key_Down){
-        d_y = 1;
-    }
-    if(event->key() == Qt::Key_Left){
-        d_x = -1;
-    }
-    if(event->key() == Qt::Key_Right){
-        d_x = 1;
-    }
-    if((*Tower)[Braver->floor][(Braver->pos_y+d_y) * X + (Braver->pos_x+d_x)] == 21 || (*Tower)[Braver->floor][(Braver->pos_y+d_y) * X + (Braver->pos_x+d_x)] == 22 || (*Tower)[Braver->floor][(Braver->pos_y+d_y) * X + (Braver->pos_x+d_x)] == 23){
-        Vars.OperationStatus=3;
-        //开门背景音乐
-        voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
-        voice_door_open->setLoopCount(1);
-        voice_door_open->setVolume(5.0f);
-        voice_door_open->play();
-        door_open_command->exec();
-    }
     if(event->key() == Qt::Key_Up){ //向上
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(1, target_pos, old_data);
-        cout<<"456"<<endl;
+        if (Vars.OperationStatus == 3){
+            voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
+            voice_door_open->setLoopCount(1);
+            voice_door_open->setVolume(5.0f);
+            voice_door_open->play();
+        }
         move_up_command->exec();
     }
 
     if(event->key() == Qt::Key_Down){ //向下
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(3, target_pos, old_data);
+        if (Vars.OperationStatus == 3){
+            voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
+            voice_door_open->setLoopCount(1);
+            voice_door_open->setVolume(5.0f);
+            voice_door_open->play();
+        }
         move_down_command->exec();
     }
     if(event->key() == Qt::Key_Left){ //向左
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(0, target_pos, old_data);
+        if (Vars.OperationStatus == 3){
+            voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
+            voice_door_open->setLoopCount(1);
+            voice_door_open->setVolume(5.0f);
+            voice_door_open->play();
+        }
         move_left_command->exec();
     }
     if(event->key() == Qt::Key_Right){ //向右
         keyUpCnt = 0;
         Vars.OperationStatus = handle_keypress(2, target_pos, old_data);
+        if (Vars.OperationStatus == 3){
+            voice_door_open->setSource(QUrl::fromLocalFile(":/music/door-open.wav"));
+            voice_door_open->setLoopCount(1);
+            voice_door_open->setVolume(5.0f);
+            voice_door_open->play();
+        }
         move_right_command->exec();
     }
     if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 31 || (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 32 || (*Tower)[Braver->floor][Braver->pos_y+1 * X + Braver->pos_x] == 33){
@@ -833,310 +831,34 @@ void View::keyPressEvent(QKeyEvent *event)
         voice_key_pick->setLoopCount(1);
         voice_key_pick->setVolume(5.0f);
         voice_key_pick->play();
-        pick_key_command->exec();
         pick_item_command->exec();
+    }
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] <= 50 + MONSTER_NUM){
+        fight_command->exec();
     }
 }
 
-void View::init_monsters(){
-    Monster[0].name = L"绿色史莱姆";
-    Monster[0].hp = 35;
-    Monster[0].atk = 18;
-    Monster[0].pdef = 1;
-    Monster[0].boss = false;
-    Monster[0].attrib = 0;
-    Monster[0].gold = 1;
-    Monster[0].exp = 0;
-    Monster[0].img = ":/Graphics/Characters/003-Monster01.png";
-    Monster[0].img_y = 0;
-
-    Monster[1].name = L"红色史莱姆";
-    Monster[1].hp = 45;
-    Monster[1].atk = 20;
-    Monster[1].pdef = 2;
-    Monster[1].boss = false;
-    Monster[1].attrib = 0;
-    Monster[1].gold = 2;
-    Monster[1].exp = 0;
-    Monster[1].img = ":/Graphics/Characters/003-Monster01.png";
-    Monster[1].img_y = 32;
-
-    Monster[2].name = L"骷髅士兵";
-    Monster[2].hp = 55;
-    Monster[2].atk = 52;
-    Monster[2].pdef = 12;
-    Monster[2].boss = false;
-    Monster[2].attrib = 0;
-    Monster[2].gold = 8;
-    Monster[2].exp = 0;
-    Monster[2].img = ":/Graphics/Characters/005-Monster03.png";
-    Monster[2].img_y = 32;
-
-    Monster[3].name = L"骷髅人";
-    Monster[3].hp = 50;
-    Monster[3].atk = 42;
-    Monster[3].pdef = 6;
-    Monster[3].boss = false;
-    Monster[3].attrib = 0;
-    Monster[3].gold = 6;
-    Monster[3].exp = 0;
-    Monster[3].img = ":/Graphics/Characters/005-Monster03.png";
-    Monster[3].img_y = 0;
-
-    Monster[4].name = L"小蝙蝠";
-    Monster[4].hp = 35;
-    Monster[4].atk = 38;
-    Monster[4].pdef = 3;
-    Monster[4].boss = false;
-    Monster[4].attrib = 0;
-    Monster[4].gold = 3;
-    Monster[4].exp = 0;
-    Monster[4].img = ":/Graphics/Characters/004-Monster02.png";
-    Monster[4].img_y = 0;
-
-    Monster[5].name = L"初级法师";
-    Monster[5].hp = 60;
-    Monster[5].atk = 32;
-    Monster[5].pdef = 8;
-    Monster[5].boss = false;
-    Monster[5].attrib = 0;
-    Monster[5].gold = 5;
-    Monster[5].exp = 0;
-    Monster[5].img = ":/Graphics/Characters/007-Monster05.png";
-    Monster[5].img_y = 0;
-
-    Monster[6].name = L"中级卫兵";
-    Monster[6].hp = 100;
-    Monster[6].atk = 180;
-    Monster[6].pdef = 110;
-    Monster[6].boss = false;
-    Monster[6].attrib = 0;
-    Monster[6].gold = 50;
-    Monster[6].exp = 0;
-    Monster[6].img = ":/Graphics/Characters/008-Monster06.png";
-    Monster[6].img_y = 32;
-
-    Monster[7].name = L"初级卫兵";
-    Monster[7].hp = 50;
-    Monster[7].atk = 48;
-    Monster[7].pdef = 22;
-    Monster[7].boss = false;
-    Monster[7].attrib = 0;
-    Monster[7].gold = 12;
-    Monster[7].exp = 0;
-    Monster[7].img = ":/Graphics/Characters/008-Monster06.png";
-    Monster[7].img_y = 0;
-
-    Monster[8].name = L"骷髅队长";
-    Monster[8].hp = 100;
-    Monster[8].atk = 65;
-    Monster[8].pdef = 15;
-    Monster[8].boss = false;
-    Monster[8].attrib = 0;
-    Monster[8].gold = 30;
-    Monster[8].exp = 0;
-    Monster[8].img = ":/Graphics/Characters/005-Monster03.png";
-    Monster[8].img_y = 64;
-
-    Monster[9].name = L"魔法警卫";
-    Monster[9].hp = 230;
-    Monster[9].atk = 450;
-    Monster[9].pdef = 100;
-    Monster[9].boss = false;
-    Monster[9].attrib = 0;
-    Monster[9].gold = 100;
-    Monster[9].exp = 0;
-    Monster[9].img = ":/Graphics/Characters/010-Monster08.png";
-    Monster[9].img_y = 32;
-
-    Monster[10].name = L"假魔王";
-    Monster[10].hp = 5000;
-    Monster[10].atk = 1580;
-    Monster[10].pdef = 190;
-    Monster[10].boss = false;
-    Monster[10].attrib = 0;
-    Monster[10].gold = 0;
-    Monster[10].exp = 0;
-    Monster[10].img = ":/Graphics/Characters/010-Monster08.png";
-    Monster[10].img_y = 0;
-}
-
-//void View::init_tower(){
-//    FLOOR tmpfloor_1 = {
-//        10, 0, 51, 52, 51, 0, 0, 0, 0, 0, 0,
-//        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-//        34, 0, 0, 21, 0, 1, 36, 31, 0, 1, 0,
-//        0, 54, 0, 1, 0, 1, 37, 34, 0, 1, 0,
-//        1, 21, 1, 1, 0, 1, 1, 1, 21, 1, 0,
-//        31, 0, 0, 1, 0, 21, 55, 56, 55, 1, 0,
-//        0, 53, 0, 1, 0, 1, 1, 1, 1, 1, 0,
-//        1, 21, 1, 1, 0, 0, 0, 0, 0, 0, 0,
-//        0, 0, 0, 1, 1, 21, 1, 1, 1, 21, 1,
-//        34, 0, 31, 1, 31, 0, 0, 1, 0, 55, 0,
-//        34, 0, 31, 1, 0, 0, 0, 1, 31, 35, 31,
-//    };
-//    memcpy((*Tower)[0], tmpfloor_1, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_2 = {
-//        11, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0,
-//        0, 0, 1, 1, 0, 57, 0, 57, 0, 1, 1,
-//        0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-//        0, 1, 31, 31, 1, 0, 0, 0, 1, 0, 44,
-//        0, 1, 31, 0, 25, 0, 0, 0, 25, 0, 0,
-//        0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-//        0, 1, 46, 0, 1, 0, 0, 0, 1, 0, 45,
-//        0, 1, 0, 0, 25, 0, 0, 0, 25, 0, 0,
-//        0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-//        0, 1, 35, 35, 1, 0, 0, 0, 1, 0, 0,
-//        10, 1, 35, 0, 25, 0, 0, 0, 25, 0, 0,
-//    };
-//    memcpy((*Tower)[1], tmpfloor_2, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_3 = {
-//        31, 37, 1, 31, 35, 31, 1, 0, 1, 0, 35,
-//        0, 34, 1, 35, 31, 35, 1, 0, 21, 55, 0,
-//        56, 0, 1, 31, 32, 31, 1, 0, 1, 1, 1,
-//        21, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0,
-//        0, 0, 55, 0, 0, 0, 51, 0, 0, 0, 0,
-//        21, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1,
-//        54, 0, 1, 1, 0, 1, 1, 0, 1, 0, 34,
-//        0, 31, 1, 0, 0, 0, 1, 0, 21, 56, 31,
-//        34, 36, 1, 0, 13, 0, 1, 0, 1, 1, 1,
-//        1, 1, 1, 1, 0, 1, 1, 52, 1, 0, 0,
-//        11, 0, 0, 0, 0, 0, 1, 0, 21, 0, 10,
-//    };
-//    memcpy((*Tower)[2], tmpfloor_3, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_4 = {
-//        0, 32, 0, 1, 41, 42, 43, 1, 0, 47, 0,
-//        34, 0, 31, 1, 0, 0, 0, 1, 31, 0, 35,
-//        0, 0, 0, 1, 0, 0, 0, 1, 0, 53, 0,
-//        1, 21, 1, 1, 1, 22, 1, 1, 1, 21, 1,
-//        0, 55, 0, 21, 0, 52, 0, 0, 54, 0, 0,
-//        0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-//        52, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0,
-//        21, 1, 1, 21, 1, 1, 1, 21, 1, 1, 21,
-//        0, 1, 0, 55, 0, 1, 0, 56, 0, 1, 0,
-//        0, 1, 51, 0, 31, 1, 36, 0, 34, 1, 0,
-//        10, 1, 31, 51, 31, 1, 0, 51, 0, 1, 11,
-//    };
-//    memcpy((*Tower)[3], tmpfloor_4, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_5 = {
-//        10, 1, 0, 52, 21, 0, 1, 0, 0, 21, 0,
-//        0, 1, 0, 0, 1, 31, 1, 51, 51, 1, 52,
-//        0, 21, 55, 0, 1, 0, 1, 31, 31, 1, 0,
-//        1, 1, 1, 21, 1, 55, 1, 31, 31, 1, 0,
-//        31, 0, 56, 0, 1, 0, 1, 1, 1, 1, 0,
-//        31, 0, 0, 55, 1, 0, 51, 0, 0, 0, 0,
-//        1, 53, 1, 1, 1, 0, 1, 1, 1, 1, 52,
-//        0, 0, 0, 0, 1, 51, 1, 0, 0, 0, 0,
-//        37, 31, 34, 0, 1, 0, 1, 21, 1, 1, 1,
-//        1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0,
-//        11, 0, 0, 0, 0, 0, 1, 0, 26, 0, 38,
-//    };
-//    memcpy((*Tower)[4], tmpfloor_5, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_6 = {
-//        11, 1, 31, 31, 1, 0, 56, 0, 31, 51, 0,
-//        0, 1, 31, 31, 1, 0, 1, 1, 1, 1, 21,
-//        0, 1, 1, 52, 1, 0, 1, 34, 0, 54, 0,
-//        0, 21, 21, 0, 21, 0, 1, 48, 0, 0, 55,
-//        0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
-//        0, 0, 52, 56, 0, 0, 0, 54, 53, 0, 0,
-//        1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
-//        56, 0, 0, 49, 1, 0, 21, 21, 0, 21, 0,
-//        0, 55, 0, 37, 1, 0, 1, 1, 52, 1, 52,
-//        21, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0,
-//        0, 51, 0, 0, 54, 0, 1, 34, 34, 1, 10,
-//    };
-//    memcpy((*Tower)[5], tmpfloor_6, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_7 = {
-//        10, 1, 36, 1, 0, 50, 0, 1, 31, 1, 51,
-//        0, 1, 34, 1, 0, 0, 0, 1, 31, 1, 52,
-//        0, 1, 55, 1, 52, 1, 53, 1, 34, 1, 51,
-//        0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-//        21, 1, 21, 1, 22, 1, 21, 1, 54, 1, 21,
-//        0, 53, 0, 56, 0, 0, 0, 0, 0, 0, 0,
-//        21, 1, 21, 1, 21, 1, 21, 1, 53, 1, 21,
-//        0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-//        0, 1, 0, 1, 55, 1, 52, 1, 35, 1, 0,
-//        51, 1, 51, 1, 31, 1, 56, 1, 31, 1, 0,
-//        0, 52, 0, 1, 31, 1, 35, 1, 31, 1, 11,
-//    };
-//    memcpy((*Tower)[6], tmpfloor_7, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_8 = {
-//        11, 0, 21, 21, 0, 10, 0, 1, 31, 0, 31,
-//        0, 0, 1, 1, 0, 0, 51, 1, 0, 33, 0,
-//        21, 1, 1, 1, 1, 21, 1, 1, 35, 0, 34,
-//        0, 1, 31, 31, 31, 0, 0, 1, 1, 24, 1,
-//        34, 1, 1, 1, 1, 1, 56, 1, 58, 0, 58,
-//        0, 52, 51, 52, 0, 1, 0, 1, 0, 0, 0,
-//        1, 1, 1, 1, 21, 1, 55, 1, 1, 21, 1,
-//        0, 0, 0, 55, 0, 54, 0, 56, 0, 0, 0,
-//        21, 1, 1, 1, 1, 1, 1, 1, 1, 1, 21,
-//        51, 0, 1, 36, 31, 1, 32, 34, 1, 0, 54,
-//        0, 55, 22, 31, 37, 1, 31, 0, 21, 53, 0,
-//    };
-//    memcpy((*Tower)[7], tmpfloor_8, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_9 = {
-//        0, 0, 54, 21, 0, 11, 0, 21, 51, 0, 34,
-//        0, 31, 0, 1, 0, 0, 0, 1, 0, 51, 0,
-//        53, 1, 1, 1, 1, 22, 1, 1, 1, 1, 0,
-//        0, 31, 0, 1, 31, 0, 31, 21, 21, 0, 0,
-//        37, 0, 55, 21, 0, 36, 0, 1, 1, 26, 1,
-//        1, 1, 1, 1, 1, 1, 52, 1, 0, 0, 53,
-//        31, 0, 21, 53, 31, 1, 0, 1, 39, 1, 0,
-//        53, 0, 1, 0, 0, 1, 0, 1, 1, 1, 21,
-//        21, 1, 1, 1, 21, 1, 0, 1, 31, 0, 56,
-//        0, 34, 1, 0, 54, 1, 55, 1, 0, 54, 0,
-//        10, 0, 22, 0, 0, 21, 0, 21, 56, 0, 34,
-//    };
-//    memcpy((*Tower)[8], tmpfloor_9, sizeof(int) * X * Y);
-
-//    FLOOR tmpfloor_10 = {
-//        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-//        1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
-//        54, 54, 54, 1, 1, 0, 1, 1, 54, 54, 54,
-//        0, 53, 0, 24, 0, 59, 0, 24, 0, 53, 0,
-//        1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
-//        54, 37, 54, 1, 1, 0, 1, 1, 54, 36, 54,
-//        0, 53, 0, 1, 1, 0, 1, 1, 0, 53, 0,
-//        0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0,
-//        21, 1, 21, 1, 1, 23, 1, 1, 21, 1, 21,
-//        0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-//        11, 1, 0, 56, 0, 14, 0, 56, 0, 1, 35,
-//    };
-//    memcpy((*Tower)[9], tmpfloor_10, sizeof(int) * X * Y);
-//}
 int View::handle_keypress(int key_no, int& target_pos, int& old_data)
 {
     // 返回操作状态。0为可以操作，1为对话框模式，2为已经game_over, 3为正在开门中, 4为上下楼转场, 5为打开自动战斗画面, 6为打开获得物品界面, 7为开启商店处理, 8为三层被打的转场，9为怪物手册处理
     // 首先找出要移动的目标位置.如果超出了地图范围，则直接返回
     old_data = -1;
     if (key_no == 0) { //向左
-        /*Braver->face = 1;*/ //0/1/2/3分别代表下左右上
         if (Braver->pos_x == 0)
             return 0;
         else
             target_pos = Braver->pos_y * X + (Braver->pos_x - 1);
     }else if (key_no == 1){ //向上
-        Braver->face = 3;
         if (Braver->pos_y == 0)
             return 0;
         else
             target_pos = (Braver->pos_y - 1) * X + Braver->pos_x;
     }else if (key_no == 2){ //向右
-        Braver->face = 2;
         if (Braver->pos_x == X - 1)
             return 0;
         else
             target_pos = Braver->pos_y * X + (Braver->pos_x + 1);
     }else if (key_no == 3){ //向下
-        Braver->face = 0;
         if (Braver->pos_y == Y - 1)
             return 0;
         else
@@ -1145,47 +867,11 @@ int View::handle_keypress(int key_no, int& target_pos, int& old_data)
         return 0;
     }
     old_data = (*Tower)[Braver->floor][target_pos];
-    std::cout<<"update_tar:"<<target_pos<<"update_pos:"<<old_data<<endl;
-    if ((*Tower)[Braver->floor][target_pos] == 0){
-        //平地 直接走过去
-//        Braver->pos_x = target_pos % X;
-//        Braver->pos_y = target_pos / X;
+    if ((*Tower)[Braver->floor][target_pos] == 0){ //平地 直接走过去
         return 0;
     }
-    else if (((*Tower)[Braver->floor][target_pos] >= 1 && (*Tower)[Braver->floor][target_pos] <= 9) || (*Tower)[Braver->floor][target_pos] == 41 || (*Tower)[Braver->floor][target_pos] == 43){
-        //撞墙 位置不变化
+    else if (((*Tower)[Braver->floor][target_pos] >= 1 && (*Tower)[Braver->floor][target_pos] <= 9) || (*Tower)[Braver->floor][target_pos] == 41 || (*Tower)[Braver->floor][target_pos] == 43){ //撞墙 位置不变化
         return 0;
-    }
-    else if ((*Tower)[Braver->floor][target_pos] == 10){
-        //上楼
-        if (Braver->floor != TOTAL_FLOOR - 1){
-//            Braver->floor += 1;
-            int target_pos_upper = 0;
-            for (int _it = 0; _it <= X * Y - 1; _it++){
-                if ((*Tower)[Braver->floor][_it] == 11){
-                    target_pos_upper = _it;
-                    break;
-                }
-            }
-//            Braver->pos_x = target_pos_upper % X;
-//            Braver->pos_y = target_pos_upper / X;
-        }
-        return 4;
-    }else if ((*Tower)[Braver->floor][target_pos] == 11){
-        //下楼
-        if (Braver->floor != 0){
-            Braver->floor -= 1;
-            int target_pos_lower = 0;
-            for (int _it = 0; _it <= X * Y - 1; _it++){
-                if ((*Tower)[Braver->floor][_it] == 10){
-                    target_pos_lower = _it;
-                    break;
-                }
-            }
-//            Braver->pos_x = target_pos_lower % X;
-//            Braver->pos_y = target_pos_lower / X;
-        }
-        return 4;
     }else if ((*Tower)[Braver->floor][target_pos] == 12){
         //触发结局一：离开。直接Game Over
         Vars.end_no = 1;
@@ -1208,95 +894,22 @@ int View::handle_keypress(int key_no, int& target_pos, int& old_data)
         return 1;
     }else if ((*Tower)[Braver->floor][target_pos] == 21){
         //黄门
-        if (Braver->key1 >= 1){
-//            Braver->key1 -= 1;
-            (*Tower)[Braver->floor][target_pos] = 0;
-        }
         return 3;
     }else if ((*Tower)[Braver->floor][target_pos] == 22){
         //蓝门
-        if (Braver->key2 >= 1){
-//            Braver->key2 -= 1;
-//            (*Tower)[Braver->floor][target_pos] = 0;
-        }
         return 3;
     }else if ((*Tower)[Braver->floor][target_pos] == 23){
         //红门
-        if (Braver->key3 >= 1){
-//            Braver->key3 -= 1;
-//            (*Tower)[Braver->floor][target_pos] = 0;
-        }
         return 3;
     }else if ((*Tower)[Braver->floor][target_pos] == 24){
         //绿门
-        if (Vars.OpenFloor8DoorCnt >= 2){
-//            (*Tower)[Braver->floor][target_pos] = 0;
-        }
         return 3;
     }else if ((*Tower)[Braver->floor][target_pos] == 25){
         //铁门
-        if (Vars.OpenFloor2DoorCnt >= 2){
-//            (*Tower)[Braver->floor][target_pos] = 0;
-        }
         return 3;
     }else if ((*Tower)[Braver->floor][target_pos] == 26){
         //暗墙
-//        (*Tower)[Braver->floor][target_pos] = 0;
         return 3;
-    }else if ((*Tower)[Braver->floor][target_pos] == 31){
-        //黄钥匙
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->key1 += 1;
-//        Vars.gain_item_msg = L"获得了一把黄钥匙";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 32){
-        //蓝钥匙
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->key2 += 1;
-//        Vars.gain_item_msg = L"获得了一把蓝钥匙";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 33){
-        //红钥匙
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->key3 += 1;
-//        Vars.gain_item_msg = L"获得了一把红钥匙";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 34){
-        //小血瓶
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->hp += 50;
-//        Vars.gain_item_msg = L"获得了小血瓶 生命值增加50";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 35){
-        //大血瓶
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->hp += 200;
-//        Vars.gain_item_msg = L"获得了大血瓶 生命值增加200";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 36){
-        //红宝石
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->atk += 1;
-//        Vars.gain_item_msg = L"攻击力增加1点";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 37){
-        //蓝宝石
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->pdef += 1;
-//        Vars.gain_item_msg = L"防御力增加1点";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 38){
-        //铁剑
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->atk += 10;
-//        Vars.gain_item_msg = L"获得了铁剑 攻击力增加10点";
-        return 6;
-    }else if ((*Tower)[Braver->floor][target_pos] == 39){
-        //铁盾
-//        (*Tower)[Braver->floor][target_pos] = 0;
-//        Braver->pdef += 10;
-//        Vars.gain_item_msg = L"获得了铁盾 防御力增加10点";
-        return 6;
     }else if ((*Tower)[Braver->floor][target_pos] == 42){
         //商店处理
 //        Vars.store_no = 1;
@@ -1367,7 +980,7 @@ int View::handle_keypress(int key_no, int& target_pos, int& old_data)
                 Vars.OpenFloor2DoorCnt += 1;
             if (monster_id == 7)
                 Vars.OpenFloor8DoorCnt += 1;
-            return 5;
+            //return 5;
         }
     }
     return 0;

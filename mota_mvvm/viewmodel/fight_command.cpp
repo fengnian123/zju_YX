@@ -2,5 +2,5 @@
 #include "viewmodel/viewmodel.h"
 
 void FightCommand::exec(){
-    //viewmodel->exec_dialog_command();
+    viewmodel->exec_fight_command();
 }

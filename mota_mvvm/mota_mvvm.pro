@@ -15,7 +15,6 @@ SOURCES += \
     view/view.cpp \
     app/app.cpp \
     viewmodel/dialog_command.cpp \
-    viewmodel/door_open_command.cpp \
     viewmodel/fight_command.cpp \
     viewmodel/floor_change_command.cpp \
     viewmodel/move_down_command.cpp \
@@ -34,7 +33,6 @@ HEADERS += \
     view/view.h \
     app/app.h \
     viewmodel/dialog_command.h \
-    viewmodel/door_open_command.h \
     viewmodel/fight_command.h \
     viewmodel/floor_change_command.h \
     viewmodel/move_down_command.h \

@@ -2,7 +2,6 @@ debug/main.o
 debug/view.o
 debug/app.o
 debug/dialog_command.o
-debug/door_open_command.o
 debug/fight_command.o
 debug/floor_change_command.o
 debug/move_down_command.o

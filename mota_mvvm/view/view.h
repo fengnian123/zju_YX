@@ -28,7 +28,6 @@ public:
     void update();
     void set_fight_command(std::shared_ptr<Command>);
     void set_pick_key_command(std::shared_ptr<Command>);
-    void set_door_open_command(std::shared_ptr<Command>);
     void set_floor_change_command(std::shared_ptr<Command>);
     void set_dialog_command(std::shared_ptr<Command>);
     void set_move_up_command(std::shared_ptr<Command>);
@@ -44,10 +43,10 @@ public:
 
     void LoadImageBeforeGame();
     void HideFightWindow();
-    void init_monsters();
     //void init_tower();
     void set_braver(std::shared_ptr<BRAVER> x);
     void set_tower(std::shared_ptr<FLOOR*> x);
+    void set_monster(std::shared_ptr<MONSTER*> x);
     int handle_keypress(int key_no, int& target_pos, int& old_data);
 public slots:
     void OnNormalTimerTriggered();
@@ -122,7 +121,6 @@ private:
     std::shared_ptr<Command> fight_command;
     std::shared_ptr<Command> pick_key_command;
     std::shared_ptr<Command> pick_item_command;
-    std::shared_ptr<Command> door_open_command;
     std::shared_ptr<Command> floor_change_command;
     std::shared_ptr<Command> dialog_command;
     std::shared_ptr<Command> move_up_command;
@@ -132,7 +130,7 @@ private:
     std::shared_ptr<Notification> update_view_notification;
 
     std::shared_ptr<BRAVER> Braver;
-    MONSTER Monster[MONSTER_NUM];
+    std::shared_ptr<MONSTER*> Monster;
     GLOBAL_VARS Vars;
     std::shared_ptr<FLOOR*> Tower;
 };
