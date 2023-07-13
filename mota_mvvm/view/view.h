@@ -106,6 +106,7 @@ private:
     int x,y;//位置
     int target_pos;
     int old_data;
+    int in_store;//是否在商店
     QTimer* NormalTimer; //层内动态效果的定时器
     QTimer* OpenDoorTimer; //播放开门动画的定时器
     QTimer* CutTimer; //转场动画的计时器
@@ -144,4 +145,4 @@ public:
         view->update();
     }
 };
-#endif // MAINWINDOW_H
+#endif

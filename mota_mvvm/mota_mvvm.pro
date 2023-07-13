@@ -12,6 +12,7 @@ TEMPLATE = app
 
 SOURCES += \
     main.cpp \
+    view/StoreWindow.cpp \
     view/view.cpp \
     app/app.cpp \
     viewmodel/dialog_command.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
     variables/variables.cpp \
 
 HEADERS += \
+    view/StoreWindow.h \
     view/view.h \
     app/app.h \
     viewmodel/dialog_command.h \
@@ -58,6 +60,7 @@ HEADERS += \
     command/pick_item_command.h
 
 FORMS += \
+    view/storewindow.ui \
     view/view.ui
 
 RESOURCES += \

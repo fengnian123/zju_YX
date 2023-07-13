@@ -79,5 +79,6 @@
         <file>music/store.wav</file>
         <file>music/fight.wav</file>
         <file>music/jianji.wav</file>
+        <file>music/store_.wav</file>
     </qresource>
 </RCC>

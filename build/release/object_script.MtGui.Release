@@ -1,4 +1,5 @@
 release/main.o
+release/StoreWindow.o
 release/view.o
 release/app.o
 release/dialog_command.o
@@ -16,4 +17,5 @@ release/command.o
 release/notification.o
 release/variables.o
 release/qrc_mtgraphics.o
+release/moc_StoreWindow.o
 release/moc_view.o

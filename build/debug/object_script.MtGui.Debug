@@ -1,4 +1,5 @@
 debug/main.o
+debug/StoreWindow.o
 debug/view.o
 debug/app.o
 debug/dialog_command.o
@@ -16,4 +17,5 @@ debug/command.o
 debug/notification.o
 debug/variables.o
 debug/qrc_mtgraphics.o
+debug/moc_StoreWindow.o
 debug/moc_view.o

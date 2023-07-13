@@ -4,6 +4,7 @@
 #include "model/model.h"
 #include "command/command.h"
 #include "notification/notification.h"
+#include "view/StoreWindow.h"
 #include <memory>
 
 App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
@@ -33,5 +34,6 @@ App::App() : view(new View), model(new Model), viewmodel(new ViewModel)
 }
 
 void App::run(){
+    wstore = new StoreWindow();
     view->show();
 }
