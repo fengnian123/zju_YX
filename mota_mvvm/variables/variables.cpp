@@ -8,12 +8,12 @@ BRAVER::BRAVER()
 {
     status = 0;
     level = 1;
-    hp = 1000;
-    atk = 10;
+    hp = 10000;
+    atk = 10000;
     pdef = 10;
     pos_x = 5;
     pos_y = 10;
-    floor = 3;
+    floor = 8;
     exp = 0;
     gold = 0;
     key1 = 10;

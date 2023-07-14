@@ -111,7 +111,7 @@ void Model::init_monsters(){
     Monster[7].img = ":/Graphics/Characters/008-Monster06.png";
     Monster[7].img_y = 0;
 
-    Monster[8].name = L"骷髅队长";
+    Monster[8].name = L"魔王1";
     Monster[8].hp = 100;
     Monster[8].atk = 65;
     Monster[8].pdef = 15;
@@ -119,30 +119,41 @@ void Model::init_monsters(){
     Monster[8].attrib = 0;
     Monster[8].gold = 30;
     Monster[8].exp = 0;
-    Monster[8].img = ":/Graphics/Characters/005-Monster03.png";
-    Monster[8].img_y = 64;
+    Monster[8].img = ":/Graphics/Characters/011-Monster09.png";
+    Monster[8].img_y = 0;
 
-    Monster[9].name = L"魔法警卫";
-    Monster[9].hp = 230;
-    Monster[9].atk = 450;
-    Monster[9].pdef = 100;
+    Monster[9].name = L"魔王2";
+    Monster[9].hp = 100;
+    Monster[9].atk = 65;
+    Monster[9].pdef = 15;
     Monster[9].boss = false;
     Monster[9].attrib = 0;
-    Monster[9].gold = 100;
+    Monster[9].gold = 30;
     Monster[9].exp = 0;
-    Monster[9].img = ":/Graphics/Characters/010-Monster08.png";
-    Monster[9].img_y = 32;
+    Monster[9].img = ":/Graphics/Characters/011-Monster09.png";
+    Monster[9].img_y = 16;
 
-    Monster[10].name = L"假魔王";
-    Monster[10].hp = 5000;
-    Monster[10].atk = 1580;
-    Monster[10].pdef = 190;
+    Monster[10].name = L"魔王3";
+    Monster[10].hp = 100;
+    Monster[10].atk = 65;
+    Monster[10].pdef = 15;
     Monster[10].boss = false;
     Monster[10].attrib = 0;
-    Monster[10].gold = 0;
+    Monster[10].gold = 30;
     Monster[10].exp = 0;
-    Monster[10].img = ":/Graphics/Characters/010-Monster08.png";
-    Monster[10].img_y = 0;
+    Monster[10].img = ":/Graphics/Characters/011-Monster09.png";
+    Monster[10].img_y = 32;
+
+    Monster[11].name = L"魔王4";
+    Monster[11].hp = 100;
+    Monster[11].atk = 65;
+    Monster[11].pdef = 15;
+    Monster[11].boss = false;
+    Monster[11].attrib = 0;
+    Monster[11].gold = 30;
+    Monster[11].exp = 0;
+    Monster[11].img = ":/Graphics/Characters/011-Monster09.png";
+    Monster[11].img_y = 48;
 }
 
 void Model::init_tower(){
@@ -165,14 +176,14 @@ void Model::init_tower(){
         11, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 1, 1, 0, 57, 0, 57, 0, 1, 1,
         0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-        0, 1, 31, 31, 1, 0, 0, 0, 1, 0, 44,
-        0, 1, 31, 0, 25, 0, 0, 0, 25, 0, 0,
+        0, 1, 31, 31, 1, 0, 0, 0, 1, 0, 51,
+        0, 1, 31, 0, 21, 0, 0, 0, 21, 0, 0,
         0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-        0, 1, 46, 0, 1, 0, 0, 0, 1, 0, 45,
-        0, 1, 0, 0, 25, 0, 0, 0, 25, 0, 0,
+        0, 1, 52, 0, 1, 0, 0, 0, 1, 0, 53,
+        0, 1, 0, 0, 21, 0, 0, 0, 21, 0, 0,
         0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
         0, 1, 35, 35, 1, 0, 0, 0, 1, 0, 0,
-        10, 1, 35, 0, 25, 0, 0, 0, 25, 0, 0,
+        10, 1, 35, 0, 21, 0, 0, 0, 21, 0, 0,
     };
     memcpy(Tower[1], tmpfloor_2, sizeof(int) * X * Y);
 
@@ -192,7 +203,7 @@ void Model::init_tower(){
     memcpy(Tower[2], tmpfloor_3, sizeof(int) * X * Y);
 
     FLOOR tmpfloor_4 = {
-        0, 32, 0, 1, 41, 42, 43, 1, 0, 47, 0,
+        0, 32, 0, 1, 41, 42, 43, 1, 0, 56, 0,
         34, 0, 31, 1, 0, 0, 0, 1, 31, 0, 35,
         0, 0, 0, 1, 0, 0, 0, 1, 0, 53, 0,
         1, 21, 1, 1, 1, 22, 1, 1, 1, 21, 1,
@@ -225,11 +236,11 @@ void Model::init_tower(){
         11, 1, 31, 31, 1, 0, 56, 0, 31, 51, 0,
         0, 1, 31, 31, 1, 0, 1, 1, 1, 1, 21,
         0, 1, 1, 52, 1, 0, 1, 34, 0, 54, 0,
-        0, 21, 21, 0, 21, 0, 1, 48, 0, 0, 55,
+        0, 21, 21, 0, 21, 0, 1, 55, 0, 0, 55,
         0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
         0, 0, 52, 56, 0, 0, 0, 54, 53, 0, 0,
         1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0,
-        56, 0, 0, 49, 1, 0, 21, 21, 0, 21, 0,
+        56, 0, 0, 54, 1, 0, 21, 21, 0, 21, 0,
         0, 55, 0, 37, 1, 0, 1, 1, 52, 1, 52,
         21, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0,
         0, 51, 0, 0, 54, 0, 1, 34, 34, 1, 10,
@@ -237,7 +248,7 @@ void Model::init_tower(){
     memcpy(Tower[5], tmpfloor_6, sizeof(int) * X * Y);
 
     FLOOR tmpfloor_7 = {
-        10, 1, 36, 1, 0, 50, 0, 1, 31, 1, 51,
+        10, 1, 36, 1, 0, 52, 0, 1, 31, 1, 51,
         0, 1, 34, 1, 0, 0, 0, 1, 31, 1, 52,
         0, 1, 55, 1, 52, 1, 53, 1, 34, 1, 51,
         0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
@@ -285,14 +296,14 @@ void Model::init_tower(){
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
         54, 54, 54, 1, 1, 0, 1, 1, 54, 54, 54,
-        0, 53, 0, 24, 0, 59, 0, 24, 0, 53, 0,
-        1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+        0, 53, 0, 24, 0, 60, 0, 24, 0, 53, 0,
+        1, 1, 1, 1, 0, 62, 0, 0, 1, 1, 1,
         54, 37, 54, 1, 1, 0, 1, 1, 54, 36, 54,
         0, 53, 0, 1, 1, 0, 1, 1, 0, 53, 0,
         0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0,
         21, 1, 21, 1, 1, 23, 1, 1, 21, 1, 21,
         0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0,
-        11, 1, 0, 56, 0, 14, 0, 56, 0, 1, 35,
+        11, 1, 0, 56, 0, 0, 0, 56, 0, 1, 35,
     };
     memcpy(Tower[9], tmpfloor_10, sizeof(int) * X * Y);
 }
