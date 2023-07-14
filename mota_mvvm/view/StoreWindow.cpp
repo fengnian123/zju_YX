@@ -35,8 +35,9 @@ void StoreWindow::Init()
     BorderColorTimer->start(100);
 }
 
-void StoreWindow::OpenStore()
+void StoreWindow::OpenStore(GLOBAL_VARS* Vars)
 {
+    this->Vars = Vars;
     choose_no = 0;
     ui->graphicsView_2->setGeometry(32, 112, 192, 32);
 }
@@ -92,16 +93,19 @@ void StoreWindow::handle_store(int choice_no, int target_pos)
         {
             //加生命的命令
         }
-        else if (choice_no == 1 && Braver->gold >= store_price){
+        else if (choice_no == 1 && Braver->gold >= store_price)
+        {
             //加攻击的命令
         }
-        else if (choice_no == 2 && Braver->gold >= store_price){
+        else if (choice_no == 2 && Braver->gold >= store_price)
+        {
             //加防御的命令
         }
     }
     else{
+        cout<<"in it"<<endl;
+        Vars->OperationStatus = 0; //恢复主塔操作
         this->close();
-        Vars.OperationStatus = 0; //恢复主塔操作
         return;
     }
 }

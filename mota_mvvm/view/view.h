@@ -21,7 +21,7 @@ class View;
 class View : public QMainWindow
 {
     Q_OBJECT
-
+    friend void handle_store(int choice_no, int target_pos);
 public:
     explicit View(QWidget *parent = nullptr);
     ~View();

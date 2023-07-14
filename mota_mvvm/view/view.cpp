@@ -130,7 +130,7 @@ void View::update(){
         wstore->ui->label_6->setText(QString::fromStdWString(L"离开商店"));
         wstore->choice_num = 4;
         wstore->target_pos = target_pos;
-        wstore->OpenStore();
+        wstore->OpenStore(&Vars);
         wstore->show();
     }
 }
@@ -725,9 +725,10 @@ void View::OnGainItemTimerTriggered()
 {
 
 }
-
+int ct=0;
 void View::keyPressEvent(QKeyEvent *event)
-{   target_pos = -1;
+{
+    target_pos = -1;
     old_data =-1;
     if(event->key() == Qt::Key_Up && Vars.OperationStatus == 0){ //向上
         keyUpCnt = 0;
@@ -808,10 +809,9 @@ void View::keyPressEvent(QKeyEvent *event)
         voice_fight->play();
         fight_command->exec();
     }
-    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 42 && in_store==0){
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 42){
         Vars.OperationStatus = 7;
         //商店背景音乐
-        in_store=1;
     }
 }
 

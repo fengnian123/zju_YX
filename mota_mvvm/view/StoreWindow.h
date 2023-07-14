@@ -19,13 +19,13 @@ public:
     ~StoreWindow();
 
     void Init();
-    void OpenStore();
+    void OpenStore(GLOBAL_VARS* Vars);
     void handle_store(int choice_no, int target_pos);
     int choice_num; //有多少个选项
     int target_pos; //商店在楼层中的位置
     std::shared_ptr<BRAVER> Braver;
     std::shared_ptr<MONSTER*> Monster;
-    GLOBAL_VARS Vars;
+    GLOBAL_VARS* Vars;
     std::shared_ptr<FLOOR*> Tower;
     Ui::StoreWindow *ui;
 
