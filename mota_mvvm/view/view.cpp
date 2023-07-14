@@ -1,4 +1,3 @@
-#include <QPixmap>
 #include <unistd.h>
 #include "view.h"
 #include <QImage>
