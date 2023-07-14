@@ -28,12 +28,13 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QGraphicsView *graphicsView_2;
+    QLabel *label_7;
 
     void setupUi(QWidget *StoreWindow)
     {
         if (StoreWindow->objectName().isEmpty())
             StoreWindow->setObjectName("StoreWindow");
-        StoreWindow->resize(256, 300);
+        StoreWindow->resize(257, 362);
         QPalette palette;
         QBrush brush(QColor(255, 255, 255, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -135,6 +136,16 @@ public:
         palette8.setBrush(QPalette::Disabled, QPalette::Base, brush3);
         palette8.setBrush(QPalette::Disabled, QPalette::Window, brush3);
         graphicsView_2->setPalette(palette8);
+        label_7 = new QLabel(StoreWindow);
+        label_7->setObjectName("label_7");
+        label_7->setGeometry(QRect(30, 290, 201, 51));
+        QPalette palette9;
+        palette9.setBrush(QPalette::Active, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
+        palette9.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
+        label_7->setPalette(palette9);
+        label_7->setFont(font1);
+        label_7->setAlignment(Qt::AlignCenter);
 
         retranslateUi(StoreWindow);
 
@@ -150,6 +161,7 @@ public:
         label_4->setText(QCoreApplication::translate("StoreWindow", "\346\217\220\345\215\207 4 \347\202\271\346\224\273\345\207\273\345\212\233", nullptr));
         label_5->setText(QCoreApplication::translate("StoreWindow", "\346\217\220\345\215\207 4 \347\202\271\351\230\262\345\276\241\345\212\233", nullptr));
         label_6->setText(QCoreApplication::translate("StoreWindow", "\347\246\273\345\274\200\345\225\206\345\272\227", nullptr));
+        label_7->setText(QCoreApplication::translate("StoreWindow", "\357\274\210\346\214\211\345\233\236\350\275\246\346\210\226\347\251\272\346\240\274\351\224\256\347\241\256\350\256\244\357\274\211", nullptr));
     } // retranslateUi
 
 };

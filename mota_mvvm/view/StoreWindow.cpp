@@ -102,6 +102,7 @@ void StoreWindow::handle_store(int choice_no, int target_pos)
     else{
         this->close();
         Vars.OperationStatus = 0; //恢复主塔操作
+        return;
     }
 }
 

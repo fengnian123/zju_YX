@@ -126,7 +126,7 @@ void View::update(){
         wstore->ui->label->setText(QString::fromStdWString(L"商店") );
         wstore->ui->label_3->setText(QString::fromStdWString(L"提升 ") + QString::number(100 * (Vars.BuyTimes + 1)) + QString::fromStdWString(L" 点生命"));
         wstore->ui->label_4->setText(QString::fromStdWString(L"提升 2 点攻击力"));
-        wstore->ui->label_5->setText(QString::fromStdWString(L"提升 4 点防御力"));
+        wstore->ui->label_5->setText(QString::fromStdWString(L"提升 2 点防御力"));
         wstore->ui->label_6->setText(QString::fromStdWString(L"离开商店"));
         wstore->choice_num = 4;
         wstore->target_pos = target_pos;
@@ -641,9 +641,7 @@ void View::OnFightTimerTriggered()
     if (fight_period_it == 0)
     {
         Braver->hp += ((*Monster)[MonsterIDTemp].hp-1) / (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * ((*Monster)[MonsterIDTemp].atk - Braver->pdef);
-        cout<<"bra"<<Braver->hp<<endl;
         //准备战斗界面
-        cout<<Braver->hp<<endl;
         ui->label_20->setText(QString::number((*Monster)[MonsterIDTemp].hp));
         ui->label_22->setText(QString::number((*Monster)[MonsterIDTemp].atk));
         ui->label_24->setText(QString::number((*Monster)[MonsterIDTemp].pdef));
@@ -751,9 +749,7 @@ void View::keyPressEvent(QKeyEvent *event)
             voice_door_open->setVolume(5.0f);
             voice_door_open->play();
         }
-        cout<<Braver->pos_x<<" bef "<<Braver->pos_y<<endl;
         move_down_command->exec();
-        cout<<Braver->pos_x<<" aft "<<Braver->pos_y<<endl;
     }
     if(event->key() == Qt::Key_Left && Vars.OperationStatus == 0){ //向左
         keyUpCnt = 0;
@@ -815,7 +811,6 @@ void View::keyPressEvent(QKeyEvent *event)
     if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 42 && in_store==0){
         Vars.OperationStatus = 7;
         //商店背景音乐
-        cout<<"store"<<endl;
         in_store=1;
     }
 }
