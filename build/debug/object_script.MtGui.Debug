@@ -2,7 +2,6 @@ debug/main.o
 debug/StoreWindow.o
 debug/view.o
 debug/app.o
-debug/dialog_command.o
 debug/fight_command.o
 debug/floor_change_command.o
 debug/move_down_command.o
@@ -11,6 +10,9 @@ debug/move_right_command.o
 debug/move_up_command.o
 debug/pick_item_command.o
 debug/pick_key_command.o
+debug/buy_atk_command.o
+debug/buy_def_command.o
+debug/buy_hp_command.o
 debug/viewmodel.o
 debug/model.o
 debug/command.o

@@ -10,7 +10,7 @@
 #include <QGraphicsView>
 #include <QMouseEvent>
 #include <QWheelEvent>
-#include "variables/variables.h"
+#include "common/variables.h"
 #include <QGraphicsScene>
 #include <QSoundEffect>
 #include "notification/notification.h"
@@ -66,6 +66,7 @@ private:
     QSoundEffect *voice_door_open;
     QSoundEffect *voice_floor_change;
     QSoundEffect *voice_fight;
+    QSoundEffect *voice_victory;
     QImage ImgWall;
     QImage ImgUpstairs;
     QImage ImgDownstairs;

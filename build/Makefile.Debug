@@ -54,7 +54,6 @@ SOURCES       = ..\mota_mvvm\main.cpp \
 		..\mota_mvvm\view\StoreWindow.cpp \
 		..\mota_mvvm\view\view.cpp \
 		..\mota_mvvm\app\app.cpp \
-		..\mota_mvvm\viewmodel\dialog_command.cpp \
 		..\mota_mvvm\viewmodel\fight_command.cpp \
 		..\mota_mvvm\viewmodel\floor_change_command.cpp \
 		..\mota_mvvm\viewmodel\move_down_command.cpp \
@@ -63,18 +62,20 @@ SOURCES       = ..\mota_mvvm\main.cpp \
 		..\mota_mvvm\viewmodel\move_up_command.cpp \
 		..\mota_mvvm\viewmodel\pick_item_command.cpp \
 		..\mota_mvvm\viewmodel\pick_key_command.cpp \
+		..\mota_mvvm\viewmodel\buy_atk_command.cpp \
+		..\mota_mvvm\viewmodel\buy_def_command.cpp \
+		..\mota_mvvm\viewmodel\buy_hp_command.cpp \
 		..\mota_mvvm\viewmodel\viewmodel.cpp \
 		..\mota_mvvm\model\model.cpp \
 		..\mota_mvvm\command\command.cpp \
 		..\mota_mvvm\notification\notification.cpp \
-		..\mota_mvvm\variables\variables.cpp debug\qrc_mtgraphics.cpp \
+		..\mota_mvvm\common\variables.cpp debug\qrc_mtgraphics.cpp \
 		debug\moc_StoreWindow.cpp \
 		debug\moc_view.cpp
 OBJECTS       = debug/main.o \
 		debug/StoreWindow.o \
 		debug/view.o \
 		debug/app.o \
-		debug/dialog_command.o \
 		debug/fight_command.o \
 		debug/floor_change_command.o \
 		debug/move_down_command.o \
@@ -83,6 +84,9 @@ OBJECTS       = debug/main.o \
 		debug/move_up_command.o \
 		debug/pick_item_command.o \
 		debug/pick_key_command.o \
+		debug/buy_atk_command.o \
+		debug/buy_def_command.o \
+		debug/buy_hp_command.o \
 		debug/viewmodel.o \
 		debug/model.o \
 		debug/command.o \
@@ -95,7 +99,6 @@ OBJECTS       = debug/main.o \
 DIST          =  ..\mota_mvvm\view\StoreWindow.h \
 		..\mota_mvvm\view\view.h \
 		..\mota_mvvm\app\app.h \
-		..\mota_mvvm\viewmodel\dialog_command.h \
 		..\mota_mvvm\viewmodel\fight_command.h \
 		..\mota_mvvm\viewmodel\floor_change_command.h \
 		..\mota_mvvm\viewmodel\move_down_command.h \
@@ -104,25 +107,17 @@ DIST          =  ..\mota_mvvm\view\StoreWindow.h \
 		..\mota_mvvm\viewmodel\move_up_command.h \
 		..\mota_mvvm\viewmodel\pick_item_command.h \
 		..\mota_mvvm\viewmodel\pick_key_command.h \
+		..\mota_mvvm\viewmodel\buy_atk_command.h \
+		..\mota_mvvm\viewmodel\buy_def_command.h \
+		..\mota_mvvm\viewmodel\buy_hp_command.h \
 		..\mota_mvvm\viewmodel\viewmodel.h \
 		..\mota_mvvm\model\model.h \
 		..\mota_mvvm\command\command.h \
 		..\mota_mvvm\notification\notification.h \
-		..\mota_mvvm\variables\variables.h \
-		command/fight_command.h \
-		command/pick_key_command.h \
-		command/door_open_command.h \
-		command/floor_change_command.h \
-		command/dialog_command.h \
-		command/move_up_command.h \
-		command/move_down_command.h \
-		command/move_left_command.h \
-		command/move_right_command.h \
-		command/pick_item_command.h ..\mota_mvvm\main.cpp \
+		..\mota_mvvm\common\variables.h ..\mota_mvvm\main.cpp \
 		..\mota_mvvm\view\StoreWindow.cpp \
 		..\mota_mvvm\view\view.cpp \
 		..\mota_mvvm\app\app.cpp \
-		..\mota_mvvm\viewmodel\dialog_command.cpp \
 		..\mota_mvvm\viewmodel\fight_command.cpp \
 		..\mota_mvvm\viewmodel\floor_change_command.cpp \
 		..\mota_mvvm\viewmodel\move_down_command.cpp \
@@ -131,11 +126,14 @@ DIST          =  ..\mota_mvvm\view\StoreWindow.h \
 		..\mota_mvvm\viewmodel\move_up_command.cpp \
 		..\mota_mvvm\viewmodel\pick_item_command.cpp \
 		..\mota_mvvm\viewmodel\pick_key_command.cpp \
+		..\mota_mvvm\viewmodel\buy_atk_command.cpp \
+		..\mota_mvvm\viewmodel\buy_def_command.cpp \
+		..\mota_mvvm\viewmodel\buy_hp_command.cpp \
 		..\mota_mvvm\viewmodel\viewmodel.cpp \
 		..\mota_mvvm\model\model.cpp \
 		..\mota_mvvm\command\command.cpp \
 		..\mota_mvvm\notification\notification.cpp \
-		..\mota_mvvm\variables\variables.cpp
+		..\mota_mvvm\common\variables.cpp
 QMAKE_TARGET  = MtGui
 DESTDIR        = debug\ #avoid trailing-slash linebreak
 TARGET         = MtGui.exe
@@ -155,10 +153,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) MtGui.zip $(SOURCES) $(DIST) ..\mota_mvvm\mota_mvvm.pro ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\spec_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\device_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\sanitize.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\gcc-base.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\g++-base.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\windows_vulkan_sdk.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\windows-vulkan.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\g++-win32.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\windows-desktop.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\qconfig.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_freetype.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_libjpeg.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_libpng.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3danimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3danimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dcore.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dcore_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dextras.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dextras_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dinput.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dinput_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dlogic.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dlogic_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickanimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickextras.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickextras_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickinput.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickinput_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickrender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickrender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3drender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3drender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_activeqt.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_activeqt_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axbase_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axcontainer.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bluetooth.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bodymovin_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_charts.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_charts_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_chartsqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_chartsqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_coap.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_coap_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_concurrent.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_core.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_core_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualization.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualization_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_dbus.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_dbus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_declarativeopcua.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_declarativeopcua_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designer.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designer_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_entrypoint_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_example_icons_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_fb_support_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_freetype_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_grpc.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_grpc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_gui.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_gui_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_harfbuzz_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_help.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_help_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_httpserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_httpserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttracker.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttracker_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_jpeg_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_jsonrpc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsanimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsanimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssettings.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssettings_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssharedimage.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssharedimage_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_languageserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_linguist.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_linguist_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_location.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_location_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_mqtt.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_mqtt_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimedia.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediaquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_network.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_network_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_networkauth.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_networkauth_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_nfc.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_nfc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opcua.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opcua_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opengl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opengl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_openglwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_openglwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_packetprotocol_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_png_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioning.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioning_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioningquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioningquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_printsupport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_protobuf.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_protobuf_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcompilerplus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcore.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcore_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmldebug_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmldom_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlintegration.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlintegration_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlmodels.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlmodels_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltest.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltyperegistrar_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3d.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3d_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3deffects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3deffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dglslparser_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticles.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticles_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysics.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysics_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dspatialaudio_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dutils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dutils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrolstestutilsprivate_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickeffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicklayouts.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicklayouts_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickshapes_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktemplates2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktestutilsprivate_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktimeline.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktimeline_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_repparser.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_repparser_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxmlqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxmlqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensors.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensors_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensorsquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensorsquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialbus.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialbus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_shadertools.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_shadertools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_spatialaudio.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_spatialaudio_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sql.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sql_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachine.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachine_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachineqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachineqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svg.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svg_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svgwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svgwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_testlib.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_testlib_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_texttospeech.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_texttospeech_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_tools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uiplugin.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uitools.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uitools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserverquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webchannel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_websockets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_websockets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webview.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webview_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webviewquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webviewquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_widgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_widgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_xml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_xml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_zlib_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt_functions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\win32-g++\qmake.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\spec_post.prf .qmake.stash ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exclusive_builds.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\toolchain.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\default_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\default_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resolve_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exclusive_builds_post.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\default_post.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\build_pass.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\lrelease.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qml_debug.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\entrypoint.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\precompile_header.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\warn_on.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resources_functions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resources.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\moc.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\opengl.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\uic.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qmake_use.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\file_copies.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\windows.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\testcase_targets.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exceptions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\yacc.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\lex.prf ..\mota_mvvm\mota_mvvm.pro ..\mota_mvvm\mtgraphics.qrc ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Multimedia.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Widgets.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Gui.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Network.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Core.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6EntryPoint.prl     ..\mota_mvvm\mtgraphics.qrc ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\data\dummy.cpp ..\mota_mvvm\view\StoreWindow.h ..\mota_mvvm\view\view.h ..\mota_mvvm\app\app.h ..\mota_mvvm\viewmodel\dialog_command.h ..\mota_mvvm\viewmodel\fight_command.h ..\mota_mvvm\viewmodel\floor_change_command.h ..\mota_mvvm\viewmodel\move_down_command.h ..\mota_mvvm\viewmodel\move_left_command.h ..\mota_mvvm\viewmodel\move_right_command.h ..\mota_mvvm\viewmodel\move_up_command.h ..\mota_mvvm\viewmodel\pick_item_command.h ..\mota_mvvm\viewmodel\pick_key_command.h ..\mota_mvvm\viewmodel\viewmodel.h ..\mota_mvvm\model\model.h ..\mota_mvvm\command\command.h ..\mota_mvvm\notification\notification.h ..\mota_mvvm\variables\variables.h command/fight_command.h command/pick_key_command.h command/door_open_command.h command/floor_change_command.h command/dialog_command.h command/move_up_command.h command/move_down_command.h command/move_left_command.h command/move_right_command.h command/pick_item_command.h  ..\mota_mvvm\main.cpp ..\mota_mvvm\view\StoreWindow.cpp ..\mota_mvvm\view\view.cpp ..\mota_mvvm\app\app.cpp ..\mota_mvvm\viewmodel\dialog_command.cpp ..\mota_mvvm\viewmodel\fight_command.cpp ..\mota_mvvm\viewmodel\floor_change_command.cpp ..\mota_mvvm\viewmodel\move_down_command.cpp ..\mota_mvvm\viewmodel\move_left_command.cpp ..\mota_mvvm\viewmodel\move_right_command.cpp ..\mota_mvvm\viewmodel\move_up_command.cpp ..\mota_mvvm\viewmodel\pick_item_command.cpp ..\mota_mvvm\viewmodel\pick_key_command.cpp ..\mota_mvvm\viewmodel\viewmodel.cpp ..\mota_mvvm\model\model.cpp ..\mota_mvvm\command\command.cpp ..\mota_mvvm\notification\notification.cpp ..\mota_mvvm\variables\variables.cpp ..\mota_mvvm\view\storewindow.ui ..\mota_mvvm\view\view.ui    
+	$(ZIP) MtGui.zip $(SOURCES) $(DIST) ..\mota_mvvm\mota_mvvm.pro ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\spec_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\device_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\sanitize.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\gcc-base.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\g++-base.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\windows_vulkan_sdk.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\windows-vulkan.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\g++-win32.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\common\windows-desktop.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\qconfig.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_freetype.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_libjpeg.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_ext_libpng.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3danimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3danimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dcore.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dcore_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dextras.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dextras_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dinput.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dinput_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dlogic.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dlogic_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickanimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickanimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickextras.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickextras_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickinput.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickinput_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickrender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickrender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3dquickscene2d_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3drender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_3drender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_activeqt.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_activeqt_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axbase_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axcontainer.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_axserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bluetooth.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_bodymovin_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_charts.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_charts_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_chartsqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_chartsqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_coap.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_coap_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_concurrent.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_core.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_core_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualization.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualization_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_datavisualizationqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_dbus.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_dbus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_declarativeopcua.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_declarativeopcua_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designer.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designer_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_entrypoint_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_example_icons_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_fb_support_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_freetype_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_grpc.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_grpc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_gui.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_gui_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_harfbuzz_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_help.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_help_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_httpserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_httpserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttracker.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttracker_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_insighttrackerqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_jpeg_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_jsonrpc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsanimation.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsanimation_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsfolderlistmodel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labsqmlmodels_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssettings.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssettings_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssharedimage.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labssharedimage_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_labswavefrontmesh_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_languageserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_linguist.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_linguist_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_location.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_location_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_mqtt.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_mqtt_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimedia.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediaquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_network.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_network_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_networkauth.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_networkauth_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_nfc.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_nfc_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opcua.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opcua_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opengl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_opengl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_openglwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_openglwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_packetprotocol_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_png_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioning.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioning_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioningquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_positioningquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_printsupport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_protobuf.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_protobuf_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcompiler_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcompilerplus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcore.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlcore_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmldebug_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmldom_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlintegration.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlintegration_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmllocalstorage_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlmodels.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlmodels_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltest.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmltyperegistrar_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlworkerscript_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_qmlxmllistmodel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3d.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3d_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetimport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dassetutils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3deffects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3deffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dglslparser_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpers_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dhelpersimpl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3diblbaker_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticleeffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticles.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dparticles_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysics.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysics_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dphysicshelpers_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3druntimerender_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dspatialaudio_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dutils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick3dutils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrols2impl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickcontrolstestutilsprivate_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2quickimpl_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickdialogs2utils_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickeffects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicklayouts.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicklayouts_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickshapes_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktemplates2.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktestutilsprivate_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktimeline.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quicktimeline_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjects.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjects_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_remoteobjectsqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_repparser.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_repparser_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxmlqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_scxmlqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensors.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensors_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensorsquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sensorsquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialbus.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialbus_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialport.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_serialport_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_shadertools.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_shadertools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_spatialaudio.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_spatialaudio_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sql.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_sql_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachine.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachine_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachineqml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_statemachineqml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svg.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svg_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svgwidgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_svgwidgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_testlib.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_testlib_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_texttospeech.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_texttospeech_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_tools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uiplugin.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uitools.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_uitools_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_virtualkeyboard_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserver.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserver_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_vncserverquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webchannel.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_websockets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_websockets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webview.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webview_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webviewquick.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_webviewquick_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_widgets.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_widgets_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_xml.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_xml_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\modules\qt_lib_zlib_private.pri ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt_functions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\win32-g++\qmake.conf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\spec_post.prf .qmake.stash ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exclusive_builds.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\toolchain.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\default_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\default_pre.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resolve_config.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exclusive_builds_post.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\default_post.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\build_pass.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\lrelease.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qml_debug.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\entrypoint.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\precompile_header.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\warn_on.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qt.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resources_functions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\resources.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\moc.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\opengl.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\uic.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\qmake_use.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\file_copies.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\win32\windows.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\testcase_targets.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\exceptions.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\yacc.prf ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\lex.prf ..\mota_mvvm\mota_mvvm.pro ..\mota_mvvm\mtgraphics.qrc ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Multimedia.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Widgets.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Gui.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Network.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6Core.prl ..\..\..\QT_creator\6.5.1\mingw_64\lib\Qt6EntryPoint.prl     ..\mota_mvvm\mtgraphics.qrc ..\..\..\QT_creator\6.5.1\mingw_64\mkspecs\features\data\dummy.cpp ..\mota_mvvm\view\StoreWindow.h ..\mota_mvvm\view\view.h ..\mota_mvvm\app\app.h ..\mota_mvvm\viewmodel\fight_command.h ..\mota_mvvm\viewmodel\floor_change_command.h ..\mota_mvvm\viewmodel\move_down_command.h ..\mota_mvvm\viewmodel\move_left_command.h ..\mota_mvvm\viewmodel\move_right_command.h ..\mota_mvvm\viewmodel\move_up_command.h ..\mota_mvvm\viewmodel\pick_item_command.h ..\mota_mvvm\viewmodel\pick_key_command.h ..\mota_mvvm\viewmodel\buy_atk_command.h ..\mota_mvvm\viewmodel\buy_def_command.h ..\mota_mvvm\viewmodel\buy_hp_command.h ..\mota_mvvm\viewmodel\viewmodel.h ..\mota_mvvm\model\model.h ..\mota_mvvm\command\command.h ..\mota_mvvm\notification\notification.h ..\mota_mvvm\common\variables.h  ..\mota_mvvm\main.cpp ..\mota_mvvm\view\StoreWindow.cpp ..\mota_mvvm\view\view.cpp ..\mota_mvvm\app\app.cpp ..\mota_mvvm\viewmodel\fight_command.cpp ..\mota_mvvm\viewmodel\floor_change_command.cpp ..\mota_mvvm\viewmodel\move_down_command.cpp ..\mota_mvvm\viewmodel\move_left_command.cpp ..\mota_mvvm\viewmodel\move_right_command.cpp ..\mota_mvvm\viewmodel\move_up_command.cpp ..\mota_mvvm\viewmodel\pick_item_command.cpp ..\mota_mvvm\viewmodel\pick_key_command.cpp ..\mota_mvvm\viewmodel\buy_atk_command.cpp ..\mota_mvvm\viewmodel\buy_def_command.cpp ..\mota_mvvm\viewmodel\buy_hp_command.cpp ..\mota_mvvm\viewmodel\viewmodel.cpp ..\mota_mvvm\model\model.cpp ..\mota_mvvm\command\command.cpp ..\mota_mvvm\notification\notification.cpp ..\mota_mvvm\common\variables.cpp ..\mota_mvvm\view\storewindow.ui ..\mota_mvvm\view\view.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.o debug\StoreWindow.o debug\view.o debug\app.o debug\dialog_command.o debug\fight_command.o debug\floor_change_command.o debug\move_down_command.o debug\move_left_command.o debug\move_right_command.o debug\move_up_command.o debug\pick_item_command.o debug\pick_key_command.o debug\viewmodel.o debug\model.o debug\command.o debug\notification.o debug\variables.o debug\qrc_mtgraphics.o debug\moc_StoreWindow.o debug\moc_view.o
+	-$(DEL_FILE) debug\main.o debug\StoreWindow.o debug\view.o debug\app.o debug\fight_command.o debug\floor_change_command.o debug\move_down_command.o debug\move_left_command.o debug\move_right_command.o debug\move_up_command.o debug\pick_item_command.o debug\pick_key_command.o debug\buy_atk_command.o debug\buy_def_command.o debug\buy_hp_command.o debug\viewmodel.o debug\model.o debug\command.o debug\notification.o debug\variables.o debug\qrc_mtgraphics.o debug\moc_StoreWindow.o debug\moc_view.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -183,6 +181,7 @@ debug/qrc_mtgraphics.cpp: ../mota_mvvm/mtgraphics.qrc \
 		../../../QT_creator/6.5.1/mingw_64/bin/rcc.exe \
 		../mota_mvvm/music/dianji-baoji.wav \
 		../mota_mvvm/music/confirm.wav \
+		../mota_mvvm/music/victory_com_1.wav \
 		../mota_mvvm/music/exp_update.mp3 \
 		../mota_mvvm/music/answer.mp3 \
 		../mota_mvvm/music/floor_change.mp3 \
@@ -212,6 +211,7 @@ debug/qrc_mtgraphics.cpp: ../mota_mvvm/mtgraphics.qrc \
 		../mota_mvvm/music/gain-yao.wav \
 		../mota_mvvm/music/store_.mp3 \
 		../mota_mvvm/Graphics/Tilesets/Mota.png \
+		../mota_mvvm/Graphics/Tilesets/begin.png \
 		../mota_mvvm/Graphics/Characters/002-Braver06.png \
 		../mota_mvvm/Graphics/Characters/017-Monster18.png \
 		../mota_mvvm/Graphics/Characters/item02.png \
@@ -433,33 +433,19 @@ debug/moc_StoreWindow.cpp: ../mota_mvvm/view/StoreWindow.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/QTimer \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qtimer.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qbasictimer.h \
-		../mota_mvvm/view/view.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QMainWindow \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qmainwindow.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qtabwidget.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QImage \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/QDebug \
-		../mota_mvvm/command/command.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsView \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsview.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpainter.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qtextoption.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpen.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qscrollarea.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qframe.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimediaglobal.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimedia-config.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimediaexports.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qaudio.h \
-		../mota_mvvm/notification/notification.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpen.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
+		../mota_mvvm/command/command.h \
 		debug/moc_predefs.h \
 		../../../QT_creator/6.5.1/mingw_64/bin/moc.exe
 	D:\QT_creator\6.5.1\mingw_64\bin\moc.exe $(DEFINES) --include D:/study/project/build/debug/moc_predefs.h -ID:/QT_creator/6.5.1/mingw_64/mkspecs/win32-g++ -ID:/study/project/mota_mvvm -ID:/QT_creator/6.5.1/mingw_64/include -ID:/QT_creator/6.5.1/mingw_64/include/QtMultimedia -ID:/QT_creator/6.5.1/mingw_64/include/QtWidgets -ID:/QT_creator/6.5.1/mingw_64/include/QtGui -ID:/QT_creator/6.5.1/mingw_64/include/QtNetwork -ID:/QT_creator/6.5.1/mingw_64/include/QtCore -I. -IC:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include/c++ -IC:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include/c++/x86_64-w64-mingw32 -IC:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include/c++/backward -IC:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include -IC:/TDM-GCC-64/include -IC:/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/10.3.0/include-fixed -IC:/TDM-GCC-64/x86_64-w64-mingw32/include ..\mota_mvvm\view\StoreWindow.h -o debug\moc_StoreWindow.cpp
@@ -638,7 +624,7 @@ debug/moc_view.cpp: ../mota_mvvm/view/view.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
@@ -998,33 +984,19 @@ debug/StoreWindow.o: ../mota_mvvm/view/StoreWindow.cpp ../mota_mvvm/view/StoreWi
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/QTimer \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qtimer.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qbasictimer.h \
-		../mota_mvvm/view/view.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QMainWindow \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qmainwindow.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qtabwidget.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QImage \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/QDebug \
-		../mota_mvvm/command/command.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsView \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsview.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpainter.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qtextoption.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpen.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qscrollarea.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qframe.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimediaglobal.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimedia-config.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qtmultimediaexports.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qaudio.h \
-		../mota_mvvm/notification/notification.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpen.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
+		../mota_mvvm/command/command.h \
 		ui_storewindow.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/QVariant \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QApplication \
@@ -1049,11 +1021,18 @@ debug/StoreWindow.o: ../mota_mvvm/view/StoreWindow.cpp ../mota_mvvm/view/StoreWi
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qinputmethod.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qlocale.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qguiapplication_platform.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsView \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsview.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpainter.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qtextoption.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qscrollarea.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qframe.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QLabel \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qlabel.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qpicture.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/qtextdocument.h \
-		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QKeyEvent
+		../mota_mvvm/common/variables.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\StoreWindow.o ..\mota_mvvm\view\StoreWindow.cpp
 
 debug/view.o: ../mota_mvvm/view/view.cpp ../../../QT_creator/6.5.1/mingw_64/include/QtGui/QPixmap \
@@ -1231,7 +1210,7 @@ debug/view.o: ../mota_mvvm/view/view.cpp ../../../QT_creator/6.5.1/mingw_64/incl
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
@@ -1480,7 +1459,7 @@ debug/app.o: ../mota_mvvm/app/app.cpp ../mota_mvvm/app/app.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
@@ -1498,19 +1477,11 @@ debug/app.o: ../mota_mvvm/app/app.cpp ../mota_mvvm/app/app.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\app.o ..\mota_mvvm\app\app.cpp
 
-debug/dialog_command.o: ../mota_mvvm/viewmodel/dialog_command.cpp ../mota_mvvm/viewmodel/dialog_command.h \
-		../mota_mvvm/command/command.h \
-		../mota_mvvm/viewmodel/viewmodel.h \
-		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
-		../mota_mvvm/notification/notification.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dialog_command.o ..\mota_mvvm\viewmodel\dialog_command.cpp
-
 debug/fight_command.o: ../mota_mvvm/viewmodel/fight_command.cpp ../mota_mvvm/viewmodel/fight_command.h \
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\fight_command.o ..\mota_mvvm\viewmodel\fight_command.cpp
 
@@ -1518,7 +1489,7 @@ debug/floor_change_command.o: ../mota_mvvm/viewmodel/floor_change_command.cpp ..
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\floor_change_command.o ..\mota_mvvm\viewmodel\floor_change_command.cpp
 
@@ -1526,7 +1497,7 @@ debug/move_down_command.o: ../mota_mvvm/viewmodel/move_down_command.cpp ../mota_
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\move_down_command.o ..\mota_mvvm\viewmodel\move_down_command.cpp
 
@@ -1534,7 +1505,7 @@ debug/move_left_command.o: ../mota_mvvm/viewmodel/move_left_command.cpp ../mota_
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\move_left_command.o ..\mota_mvvm\viewmodel\move_left_command.cpp
 
@@ -1542,7 +1513,7 @@ debug/move_right_command.o: ../mota_mvvm/viewmodel/move_right_command.cpp ../mot
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\move_right_command.o ..\mota_mvvm\viewmodel\move_right_command.cpp
 
@@ -1550,7 +1521,7 @@ debug/move_up_command.o: ../mota_mvvm/viewmodel/move_up_command.cpp ../mota_mvvm
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\move_up_command.o ..\mota_mvvm\viewmodel\move_up_command.cpp
 
@@ -1558,7 +1529,7 @@ debug/pick_item_command.o: ../mota_mvvm/viewmodel/pick_item_command.cpp ../mota_
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\pick_item_command.o ..\mota_mvvm\viewmodel\pick_item_command.cpp
 
@@ -1566,13 +1537,36 @@ debug/pick_key_command.o: ../mota_mvvm/viewmodel/pick_key_command.cpp ../mota_mv
 		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\pick_key_command.o ..\mota_mvvm\viewmodel\pick_key_command.cpp
 
-debug/viewmodel.o: ../mota_mvvm/viewmodel/viewmodel.cpp ../mota_mvvm/viewmodel/dialog_command.h \
+debug/buy_atk_command.o: ../mota_mvvm/viewmodel/buy_atk_command.cpp ../mota_mvvm/viewmodel/buy_atk_command.h \
 		../mota_mvvm/command/command.h \
-		../mota_mvvm/viewmodel/fight_command.h \
+		../mota_mvvm/viewmodel/viewmodel.h \
+		../mota_mvvm/model/model.h \
+		../mota_mvvm/common/variables.h \
+		../mota_mvvm/notification/notification.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\buy_atk_command.o ..\mota_mvvm\viewmodel\buy_atk_command.cpp
+
+debug/buy_def_command.o: ../mota_mvvm/viewmodel/buy_def_command.cpp ../mota_mvvm/viewmodel/buy_def_command.h \
+		../mota_mvvm/command/command.h \
+		../mota_mvvm/viewmodel/viewmodel.h \
+		../mota_mvvm/model/model.h \
+		../mota_mvvm/common/variables.h \
+		../mota_mvvm/notification/notification.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\buy_def_command.o ..\mota_mvvm\viewmodel\buy_def_command.cpp
+
+debug/buy_hp_command.o: ../mota_mvvm/viewmodel/buy_hp_command.cpp ../mota_mvvm/viewmodel/buy_hp_command.h \
+		../mota_mvvm/command/command.h \
+		../mota_mvvm/viewmodel/viewmodel.h \
+		../mota_mvvm/model/model.h \
+		../mota_mvvm/common/variables.h \
+		../mota_mvvm/notification/notification.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\buy_hp_command.o ..\mota_mvvm\viewmodel\buy_hp_command.cpp
+
+debug/viewmodel.o: ../mota_mvvm/viewmodel/viewmodel.cpp ../mota_mvvm/viewmodel/fight_command.h \
+		../mota_mvvm/command/command.h \
 		../mota_mvvm/viewmodel/floor_change_command.h \
 		../mota_mvvm/viewmodel/pick_key_command.h \
 		../mota_mvvm/viewmodel/move_down_command.h \
@@ -1580,14 +1574,17 @@ debug/viewmodel.o: ../mota_mvvm/viewmodel/viewmodel.cpp ../mota_mvvm/viewmodel/d
 		../mota_mvvm/viewmodel/move_left_command.h \
 		../mota_mvvm/viewmodel/move_right_command.h \
 		../mota_mvvm/viewmodel/pick_item_command.h \
+		../mota_mvvm/viewmodel/buy_atk_command.h \
+		../mota_mvvm/viewmodel/buy_def_command.h \
+		../mota_mvvm/viewmodel/buy_hp_command.h \
 		../mota_mvvm/notification/notification.h \
 		../mota_mvvm/viewmodel/viewmodel.h \
 		../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h
+		../mota_mvvm/common/variables.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\viewmodel.o ..\mota_mvvm\viewmodel\viewmodel.cpp
 
 debug/model.o: ../mota_mvvm/model/model.cpp ../mota_mvvm/model/model.h \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../mota_mvvm/notification/notification.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\model.o ..\mota_mvvm\model\model.cpp
 
@@ -1769,7 +1766,7 @@ debug/notification.o: ../mota_mvvm/notification/notification.cpp ../mota_mvvm/no
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/qgraphicsscene.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QMouseEvent \
 		../../../QT_creator/6.5.1/mingw_64/include/QtGui/QWheelEvent \
-		../mota_mvvm/variables/variables.h \
+		../mota_mvvm/common/variables.h \
 		../../../QT_creator/6.5.1/mingw_64/include/QtWidgets/QGraphicsScene \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/QSoundEffect \
 		../../../QT_creator/6.5.1/mingw_64/include/QtMultimedia/qsoundeffect.h \
@@ -1781,8 +1778,8 @@ debug/notification.o: ../mota_mvvm/notification/notification.cpp ../mota_mvvm/no
 		../mota_mvvm/model/model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\notification.o ..\mota_mvvm\notification\notification.cpp
 
-debug/variables.o: ../mota_mvvm/variables/variables.cpp ../mota_mvvm/variables/variables.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\variables.o ..\mota_mvvm\variables\variables.cpp
+debug/variables.o: ../mota_mvvm/common/variables.cpp ../mota_mvvm/common/variables.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\variables.o ..\mota_mvvm\common\variables.cpp
 
 debug/qrc_mtgraphics.o: debug/qrc_mtgraphics.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\qrc_mtgraphics.o debug\qrc_mtgraphics.cpp

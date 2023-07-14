@@ -1,4 +1,5 @@
 #include <QPixmap>
+#include <unistd.h>
 #include "view.h"
 #include <QImage>
 #include "ui_view.h"
@@ -33,6 +34,7 @@ View::View(QWidget *parent)
     voice_fight=new QSoundEffect;
     voice_key_pick=new QSoundEffect;
     voice_item_pick=new QSoundEffect;
+    voice_victory=new QSoundEffect;
     pixmap_items = new QGraphicsPixmapItem*[X * Y];
     update_view_notification = std::static_pointer_cast<Notification, UpdateViewNotification>(std::shared_ptr<UpdateViewNotification>(new UpdateViewNotification(std::shared_ptr<View>(this))));
     wstore = new StoreWindow;
@@ -64,7 +66,7 @@ void View::LoadImageBeforeGame()
         ImgGDoor[t] = QImage(":/Graphics/Characters/men001.png").copy(96, 32 * t, 32, 32);
         ImgIDoor[t] = QImage(":/Graphics/Characters/men002.png").copy(96, 32 * t, 32, 32);
         ImgFalseWall[t] = QImage(":/Graphics/Characters/men002.png").copy(32, 32 * t, 32, 32);
-        ImgNpcOld[t] = QImage(":/Graphics/Characters/001-npc01.png").copy(32 * t, 0, 32, 32);
+        ImgNpcOld[t] = QImage(":/Graphics/Characters/001-npc02.png").copy(32 * t, 96, 32, 32);
         ImgNpcRed[t] = QImage(":/Graphics/Characters/001-npc01.png").copy(32 * t, 32, 32, 32);
         ImgNpcThief[t] = QImage(":/Graphics/Characters/001-npc01.png").copy(32 * t, 64, 32, 32);
     }
@@ -119,7 +121,9 @@ void View::update(){
         DisplayData();
         FightTargetPos = target_pos;
         FightTimer->start(100);
+        //if(Braver->exp)
     }else if (Vars.OperationStatus == 7){
+        DisplayData();
         scene_store = new QGraphicsScene;
         scene_store->addPixmap(QPixmap::fromImage(ImgStoreMiddle[0]));
         wstore->ui->graphicsView->setScene(scene_store);
@@ -133,6 +137,9 @@ void View::update(){
         wstore->target_pos = target_pos;
         wstore->OpenStore(&Vars);
         wstore->show();
+    }
+else if (Vars.OperationStatus == 8){
+
     }
 }
 
@@ -295,6 +302,9 @@ void View::InitGraphics()
     connect(CutTimer, SIGNAL(timeout()), this, SLOT(OnCutTimerTriggered()));
     connect(FightTimer, SIGNAL(timeout()), this, SLOT(OnFightTimerTriggered()));
     connect(GainItemTimer, SIGNAL(timeout()), this, SLOT(OnGainItemTimerTriggered()));
+    QMessageBox message(QMessageBox::NoIcon, "魔塔游戏", "游戏规则：上下左右移动进行战斗、捡物品等\n\n\n目标：击败boss解救公主");
+    message.setIconPixmap(QPixmap(":/Graphics/Tilesets/begin.png"));
+    message.exec();
 }
 void View::DisplayData()
 {
@@ -302,7 +312,6 @@ void View::DisplayData()
     ui->label_10->setText(QString::number(Braver->hp));
     ui->label_11->setText(QString::number(Braver->atk));
     ui->label_12->setText(QString::number(Braver->pdef));
-    ui->label_13->setText(QString::number(Braver->exp));
     ui->label_7->setText(QString::number(Braver->key1));
     ui->label_14->setText(QString::number(Braver->key2));
     ui->label_15->setText(QString::number(Braver->key3));
@@ -695,13 +704,12 @@ void View::OnFightTimerTriggered()
         fight_period_it++;
     }else{
         if (fight_end_it <= 2){
-            //ui->label_26->show();
             fight_end_it++;
         }
         else if(fight_end_it == 3){
             //隐藏战斗界面
             HideFightWindow();
-            ui->label_34->setText(QString::fromWCharArray(L"获得经验值 ") + QString::number((*Monster)[MonsterIDTemp].exp) + QString::fromWCharArray(L" 金币 ") + QString::number((*Monster)[MonsterIDTemp].gold));
+            ui->label_34->setText(QString::fromWCharArray(L"获得 ")+ QString::fromWCharArray(L" 金币 ") + QString::number((*Monster)[MonsterIDTemp].gold));
             ui->label_34->show();
             Braver->hp -= ((*Monster)[MonsterIDTemp].hp-1) / (Braver->atk - (*Monster)[MonsterIDTemp].pdef) * ((*Monster)[MonsterIDTemp].atk - Braver->pdef);
             DisplayData();
@@ -805,7 +813,7 @@ void View::keyPressEvent(QKeyEvent *event)
         MonsterIDTemp = (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] - 51;
         int times = (*Monster)[MonsterIDTemp].hp / (Braver->atk - (*Monster)[MonsterIDTemp].pdef);
         voice_fight->setSource(QUrl::fromLocalFile(":/music/fight.wav"));
-        voice_fight->setLoopCount(times+1);
+        voice_fight->setLoopCount(times);
         voice_fight->setVolume(5.0f);
         voice_fight->play();
         fight_command->exec();
@@ -813,6 +821,17 @@ void View::keyPressEvent(QKeyEvent *event)
     if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 42){
         Vars.OperationStatus = 7;
         //商店背景音乐
+    }
+    if((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] == 44){
+        Vars.OperationStatus = 8;
+        //成功背景音乐
+        voice_victory->setSource(QUrl::fromLocalFile(":/music/victory_com_1.wav"));
+        voice_victory->setLoopCount(1);
+        voice_victory->setVolume(5.0f);
+        voice_victory->play();
+        voice_bgm->stop();
+        ui->label_26->setText("恭喜你，成功解救了公主！");
+        ui->label_26->show();
     }
 }
 

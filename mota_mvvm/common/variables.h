@@ -74,10 +74,5 @@ public:
     GLOBAL_VARS();
 };
 
-//extern BRAVER Braver;
-//extern MONSTER Monster[MONSTER_NUM];
-//extern GLOBAL_VARS Vars;
-
-//extern FLOOR Tower[TOTAL_FLOOR];
 
 #endif // VARIABLES_H

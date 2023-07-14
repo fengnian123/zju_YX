@@ -2,7 +2,7 @@
 #define MODEL_H
 #include <memory>
 #include <string>
-#include "variables/variables.h"
+#include "common/variables.h"
 #include "notification/notification.h"
 
 using namespace std;

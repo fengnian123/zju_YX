@@ -179,7 +179,7 @@
     <property name="geometry">
      <rect>
       <x>48</x>
-      <y>30</y>
+      <y>40</y>
       <width>60</width>
       <height>20</height>
      </rect>
@@ -230,12 +230,15 @@
     <property name="text">
      <string>等级</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
       <x>48</x>
-      <y>60</y>
+      <y>80</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -291,7 +294,7 @@
     <property name="geometry">
      <rect>
       <x>48</x>
-      <y>90</y>
+      <y>110</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -347,7 +350,7 @@
     <property name="geometry">
      <rect>
       <x>48</x>
-      <y>120</y>
+      <y>140</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -399,67 +402,11 @@
      <string>防御力</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>48</x>
-      <y>150</y>
-      <width>71</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>190</red>
-          <green>190</green>
-          <blue>190</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <family>楷体</family>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>经验值</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>30</y>
+      <y>40</y>
       <width>80</width>
       <height>20</height>
      </rect>
@@ -518,7 +465,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>60</y>
+      <y>80</y>
       <width>80</width>
       <height>20</height>
      </rect>
@@ -577,7 +524,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>90</y>
+      <y>110</y>
       <width>80</width>
       <height>20</height>
      </rect>
@@ -636,7 +583,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>120</y>
+      <y>140</y>
       <width>80</width>
       <height>20</height>
      </rect>
@@ -686,65 +633,6 @@
     </property>
     <property name="text">
      <string>100</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_13">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>150</y>
-      <width>80</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>190</red>
-          <green>190</green>
-          <blue>190</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <family>华文楷体</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -1952,10 +1840,10 @@
    <widget class="QLabel" name="label_26">
     <property name="geometry">
      <rect>
-      <x>288</x>
-      <y>176</y>
-      <width>192</width>
-      <height>64</height>
+      <x>228</x>
+      <y>109</y>
+      <width>321</width>
+      <height>211</height>
      </rect>
     </property>
     <property name="palette">
@@ -1997,9 +1885,9 @@
     </property>
     <property name="font">
      <font>
-      <family>华文行楷</family>
-      <pointsize>30</pointsize>
-      <bold>true</bold>
+      <family>Microsoft YaHei UI</family>
+      <pointsize>20</pointsize>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">

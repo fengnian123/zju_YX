@@ -1,6 +1,6 @@
 #include "StoreWindow.h"
 #include "ui_storewindow.h"
-#include "variables/variables.h"
+#include "common/variables.h"
 
 StoreWindow::StoreWindow(QWidget *parent) :
     QWidget(parent),

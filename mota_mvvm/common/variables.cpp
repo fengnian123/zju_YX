@@ -13,9 +13,9 @@ BRAVER::BRAVER()
     pdef = 10;
     pos_x = 5;
     pos_y = 10;
-    floor = 3;
+    floor = 0;
     exp = 0;
-    gold = 100;
+    gold = 0;
     key1 = 10;
     key2 = 10;
     key3 = 10;

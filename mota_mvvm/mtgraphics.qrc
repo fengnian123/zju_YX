@@ -80,5 +80,7 @@
         <file>music/fight.wav</file>
         <file>music/jianji.wav</file>
         <file>music/store_.wav</file>
+        <file>music/victory_com_1.wav</file>
+        <file>Graphics/Tilesets/begin.png</file>
     </qresource>
 </RCC>
