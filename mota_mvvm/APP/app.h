@@ -6,6 +6,7 @@
 class ViewModel;
 class View;
 class Model;
+class StoreWindow;
 class Notification;
 
 class App

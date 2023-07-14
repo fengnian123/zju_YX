@@ -1,4 +1,3 @@
-#include "dialog_command.h"
 #include "fight_command.h"
 #include "floor_change_command.h"
 #include "pick_key_command.h"
@@ -7,11 +6,13 @@
 #include "move_left_command.h"
 #include "move_right_command.h"
 #include "pick_item_command.h"
+#include "buy_atk_command.h"
+#include "buy_def_command.h"
+#include "buy_hp_command.h"
 #include "notification/notification.h"
 #include "viewmodel.h"
 
 ViewModel::ViewModel(){
-    dialog_command = std::static_pointer_cast<Command, DialogCommand>(std::shared_ptr<DialogCommand>(new DialogCommand(std::shared_ptr<ViewModel>(this))));
     fight_command = std::static_pointer_cast<Command, FightCommand>(std::shared_ptr<FightCommand>(new FightCommand(std::shared_ptr<ViewModel>(this))));
     floor_change_command = std::static_pointer_cast<Command, FloorChangeCommand>(std::shared_ptr<FloorChangeCommand>(new FloorChangeCommand(std::shared_ptr<ViewModel>(this))));
     pick_key_command = std::static_pointer_cast<Command, PickKeyCommand>(std::shared_ptr<PickKeyCommand>(new PickKeyCommand(std::shared_ptr<ViewModel>(this))));
@@ -20,6 +21,9 @@ ViewModel::ViewModel(){
     move_up_command = std::static_pointer_cast<Command, MoveUpCommand>(std::shared_ptr<MoveUpCommand>(new MoveUpCommand(std::shared_ptr<ViewModel>(this))));
     move_left_command = std::static_pointer_cast<Command, MoveLeftCommand>(std::shared_ptr<MoveLeftCommand>(new MoveLeftCommand(std::shared_ptr<ViewModel>(this))));
     move_right_command = std::static_pointer_cast<Command, MoveRightCommand>(std::shared_ptr<MoveRightCommand>(new MoveRightCommand(std::shared_ptr<ViewModel>(this))));
+    buy_atk_command = std::static_pointer_cast<Command, BuyAtkCommand>(std::shared_ptr<BuyAtkCommand>(new BuyAtkCommand(std::shared_ptr<ViewModel>(this))));
+    buy_def_command = std::static_pointer_cast<Command, BuyDefCommand>(std::shared_ptr<BuyDefCommand>(new BuyDefCommand(std::shared_ptr<ViewModel>(this))));
+    buy_hp_command = std::static_pointer_cast<Command, BuyHpCommand>(std::shared_ptr<BuyHpCommand>(new BuyHpCommand(std::shared_ptr<ViewModel>(this))));
     update_display_data_notification = std::static_pointer_cast<Notification, UpdateDisplayDataNotification>
         (std::shared_ptr<UpdateDisplayDataNotification>(new UpdateDisplayDataNotification(std::shared_ptr<ViewModel>(this))));
 }
@@ -58,13 +62,14 @@ std::shared_ptr<Notification> ViewModel::get_update_display_data_notification(){
     return update_display_data_notification;
 }
 
-void ViewModel::exec_dialog_command(int x){mod->change_dialog_no(x);}
-
 void ViewModel::exec_fight_command(){
     set_tower(mod->get_tower());
     set_braver(mod->get_braver());
     set_monster(mod->get_monster());
+    int monster_id = (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x] - 51;
     mod->change_hp(-mod->calc_damage(Braver->pos_y * X + Braver->pos_x));
+    mod->change_gold((*Monster)[monster_id].gold);
+    mod->change_exp((*Monster)[monster_id].exp);
     mod->clear_floor(Braver->pos_y * X + Braver->pos_x);
 }
 
@@ -137,7 +142,7 @@ void ViewModel::exec_move_down_command(){
     int damage = mod->calc_damage((Braver->pos_y + 1) * X + Braver->pos_x);
     if (Braver->pos_y >= Y - 1) mod->change_pos_y(0, 0);
     else if ((*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] == 1) mod->change_pos_y(0, 0);
-    else if ((*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] <= 50 + MONSTER_NUM && damage >= Braver->hp){
+    else if ((*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] <= 50 + MONSTER_NUM && (damage >= Braver->hp || !(mod->break_def((Braver->pos_y + 1) * X + Braver->pos_x)))){
         mod->change_pos_y(0, 0);
     }
     else if ((*Tower)[Braver->floor][(Braver->pos_y + 1) * X + Braver->pos_x] == 21){
@@ -174,7 +179,7 @@ void ViewModel::exec_move_up_command(){
     //cout << (*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] << endl;
     if (Braver->pos_y <= 0) mod->change_pos_y(0, 3);
     else if ((*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] == 1) mod->change_pos_y(0, 3);
-    else if ((*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] <= 50 + MONSTER_NUM && damage >= Braver->hp){
+    else if ((*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] >= 51 && (*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] <= 50 + MONSTER_NUM && (damage >= Braver->hp || !(mod->break_def((Braver->pos_y - 1) * X + Braver->pos_x)))){
         mod->change_pos_y(0, 3);
     }
     else if ((*Tower)[Braver->floor][(Braver->pos_y - 1) * X + Braver->pos_x] == 21){
@@ -210,7 +215,7 @@ void ViewModel::exec_move_left_command(){
     int damage = mod->calc_damage(Braver->pos_y * X + Braver->pos_x - 1);
     if (Braver->pos_x <= 0) mod->change_pos_x(0, 1);
     else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] == 1) mod->change_pos_x(0, 1);
-    else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] <= 50 + MONSTER_NUM && damage >= Braver->hp){
+    else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] <= 50 + MONSTER_NUM && (damage >= Braver->hp || !(mod->break_def(Braver->pos_y * X + Braver->pos_x - 1)))){
         mod->change_pos_y(0, 1);
     }
     else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x - 1] == 21){
@@ -246,7 +251,7 @@ void ViewModel::exec_move_right_command(){
     int damage = mod->calc_damage(Braver->pos_y * X + Braver->pos_x + 1);
     if (Braver->pos_x >= X - 1) mod->change_pos_x(0, 2);
     else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] == 1) mod->change_pos_x(0, 2);
-    else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] <= 50 + MONSTER_NUM && damage >= Braver->hp){
+    else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] >= 51 && (*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] <= 50 + MONSTER_NUM && (damage >= Braver->hp || !(mod->break_def(Braver->pos_y * X + Braver->pos_x + 1)))){
         mod->change_pos_y(0, 2);
     }
     else if ((*Tower)[Braver->floor][Braver->pos_y * X + Braver->pos_x + 1] == 21){
@@ -276,8 +281,28 @@ void ViewModel::exec_move_right_command(){
     }
 }
 
-std::shared_ptr<Command> ViewModel::get_dialog_command(){
-    return dialog_command;
+void ViewModel::exec_buy_atk_command(){
+    set_braver(mod->get_braver());
+    if (Braver->gold >= 15){
+        mod->change_atk(4);
+        mod->change_gold(-15);
+    }
+}
+
+void ViewModel::exec_buy_def_command(){
+    set_braver(mod->get_braver());
+    if (Braver->gold >= 15){
+        mod->change_pdef(4);
+        mod->change_gold(-15);
+    }
+}
+
+void ViewModel::exec_buy_hp_command(){
+    set_braver(mod->get_braver());
+    if (Braver->gold >= 15){
+        mod->change_hp(800);
+        mod->change_gold(-15);
+    }
 }
 
 std::shared_ptr<Command> ViewModel::get_fight_command(){
@@ -310,4 +335,16 @@ std::shared_ptr<Command> ViewModel::get_move_left_command(){
 
 std::shared_ptr<Command> ViewModel::get_move_right_command(){
     return move_right_command;
+}
+
+std::shared_ptr<Command> ViewModel::get_buy_atk_command(){
+    return buy_atk_command;
+}
+
+std::shared_ptr<Command> ViewModel::get_buy_def_command(){
+    return buy_def_command;
+}
+
+std::shared_ptr<Command> ViewModel::get_buy_hp_command(){
+    return buy_hp_command;
 }

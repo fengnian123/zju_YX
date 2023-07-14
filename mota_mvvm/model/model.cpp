@@ -22,6 +22,15 @@ int Model::calc_damage(int pos){
     return 0;
 }
 
+int Model::break_def(int pos){
+    if (Tower[Braver->floor][pos] >= 51 && Tower[Braver->floor][pos] <= 50 + MONSTER_NUM){
+        int monster_id = Tower[Braver->floor][pos] - 51;
+        int braver_damage = Braver->atk - Monster[monster_id].pdef;
+        if (braver_damage <= 0) return 0;
+    }
+    return 1;
+}
+
 void Model::init_monsters(){
     Monster[0].name = L"绿色史莱姆";
     Monster[0].hp = 35;

@@ -35,6 +35,7 @@ View::View(QWidget *parent)
     voice_item_pick=new QSoundEffect;
     pixmap_items = new QGraphicsPixmapItem*[X * Y];
     update_view_notification = std::static_pointer_cast<Notification, UpdateViewNotification>(std::shared_ptr<UpdateViewNotification>(new UpdateViewNotification(std::shared_ptr<View>(this))));
+    wstore = new StoreWindow;
 }
 
 void View::LoadImageBeforeGame()
@@ -124,15 +125,19 @@ void View::update(){
         wstore->ui->graphicsView->setScene(scene_store);
         wstore->ui->graphicsView->setStyleSheet("background:transparent;border:none;");
         wstore->ui->label->setText(QString::fromStdWString(L"商店") );
-        wstore->ui->label_3->setText(QString::fromStdWString(L"提升 ") + QString::number(100 * (Vars.BuyTimes + 1)) + QString::fromStdWString(L" 点生命"));
-        wstore->ui->label_4->setText(QString::fromStdWString(L"提升 2 点攻击力"));
-        wstore->ui->label_5->setText(QString::fromStdWString(L"提升 2 点防御力"));
+        wstore->ui->label_3->setText(QString::fromStdWString(L"提升 800 点生命"));
+        wstore->ui->label_4->setText(QString::fromStdWString(L"提升 4 点攻击力"));
+        wstore->ui->label_5->setText(QString::fromStdWString(L"提升 4 点防御力"));
         wstore->ui->label_6->setText(QString::fromStdWString(L"离开商店"));
         wstore->choice_num = 4;
         wstore->target_pos = target_pos;
         wstore->OpenStore(&Vars);
         wstore->show();
     }
+}
+
+StoreWindow* View::get_wstore(){
+    return wstore;
 }
 
 void View::set_fight_command(std::shared_ptr<Command> command)
@@ -150,10 +155,6 @@ void View::set_pick_item_command(std::shared_ptr<Command> command)
 void View::set_floor_change_command(std::shared_ptr<Command> command)
 {
     floor_change_command = command;
-}
-void View::set_dialog_command(std::shared_ptr<Command> command)
-{
-    dialog_command = command;
 }
 
 void View::set_move_down_command(std::shared_ptr<Command> command)

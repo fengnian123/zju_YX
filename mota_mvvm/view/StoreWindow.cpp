@@ -1,7 +1,6 @@
 #include "StoreWindow.h"
 #include "ui_storewindow.h"
-#include <QKeyEvent>
-StoreWindow* wstore;
+#include "variables/variables.h"
 
 StoreWindow::StoreWindow(QWidget *parent) :
     QWidget(parent),
@@ -33,6 +32,21 @@ void StoreWindow::Init()
     BorderColorTimer = new QTimer();
     connect(BorderColorTimer, SIGNAL(timeout()), this, SLOT(OnColorTimerTriggered()));
     BorderColorTimer->start(100);
+}
+
+void StoreWindow::set_buy_atk_command(std::shared_ptr<Command> command)
+{
+    buy_atk_command = command;
+}
+
+void StoreWindow::set_buy_def_command(std::shared_ptr<Command> command)
+{
+    buy_def_command = command;
+}
+
+void StoreWindow::set_buy_hp_command(std::shared_ptr<Command> command)
+{
+    buy_hp_command = command;
 }
 
 void StoreWindow::OpenStore(GLOBAL_VARS* Vars)
@@ -87,23 +101,21 @@ void StoreWindow::keyPressEvent(QKeyEvent *event)
 void StoreWindow::handle_store(int choice_no, int target_pos)
 {
     // 商店处理
-    int store_price = 15;
     if (choose_no != choice_num - 1){
-        if (choice_no == 0 && Braver->gold >= store_price)
+        if (choice_no == 0)
         {
-            //加生命的命令
+            buy_hp_command->exec();
         }
-        else if (choice_no == 1 && Braver->gold >= store_price)
+        else if (choice_no == 1)
         {
-            //加攻击的命令
+            buy_atk_command->exec();
         }
-        else if (choice_no == 2 && Braver->gold >= store_price)
+        else if (choice_no == 2)
         {
-            //加防御的命令
+            buy_def_command->exec();
         }
     }
     else{
-        cout<<"in it"<<endl;
         Vars->OperationStatus = 0; //恢复主塔操作
         this->close();
         return;

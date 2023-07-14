@@ -92,6 +92,7 @@ public:
     void init_tower();
 
     int calc_damage(int pos);
+    int break_def(int pos);
 
     std::shared_ptr<BRAVER> get_braver() {return Braver;}
     std::shared_ptr<FLOOR*> get_tower() {return Tower_ptr;}

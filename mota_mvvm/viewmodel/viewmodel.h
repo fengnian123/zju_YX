@@ -13,7 +13,6 @@ class ViewModel
 {
 private:
     std::shared_ptr<Model> mod;
-    std::shared_ptr<Command> dialog_command;
     std::shared_ptr<Command> fight_command;
     std::shared_ptr<Command> floor_change_command;
     std::shared_ptr<Command> pick_key_command;
@@ -22,6 +21,9 @@ private:
     std::shared_ptr<Command> move_up_command;
     std::shared_ptr<Command> move_left_command;
     std::shared_ptr<Command> move_right_command;
+    std::shared_ptr<Command> buy_atk_command;
+    std::shared_ptr<Command> buy_def_command;
+    std::shared_ptr<Command> buy_hp_command;
 
     std::shared_ptr<Notification> update_display_data_notification;
 
@@ -36,7 +38,6 @@ public:
     void notified();
     void set_update_view_notification(std::shared_ptr<Notification> notification);
     std::shared_ptr<Notification> get_update_display_data_notification();
-    void exec_dialog_command(int x);
     void exec_fight_command();
     void exec_floor_change_command();
     void exec_pick_key_command();
@@ -45,7 +46,9 @@ public:
     void exec_move_up_command();
     void exec_move_left_command();
     void exec_move_right_command();
-    std::shared_ptr<Command> get_dialog_command();
+    void exec_buy_atk_command();
+    void exec_buy_def_command();
+    void exec_buy_hp_command();
     std::shared_ptr<Command> get_fight_command();
     std::shared_ptr<Command> get_floor_change_command();
     std::shared_ptr<Command> get_pick_key_command();
@@ -54,6 +57,9 @@ public:
     std::shared_ptr<Command> get_move_up_command();
     std::shared_ptr<Command> get_move_left_command();
     std::shared_ptr<Command> get_move_right_command();
+    std::shared_ptr<Command> get_buy_atk_command();
+    std::shared_ptr<Command> get_buy_def_command();
+    std::shared_ptr<Command> get_buy_hp_command();
     std::shared_ptr<BRAVER> get_braver();
     std::shared_ptr<FLOOR*> get_tower();
     std::shared_ptr<MONSTER*> get_monster();

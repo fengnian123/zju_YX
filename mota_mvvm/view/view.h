@@ -14,6 +14,7 @@
 #include <QGraphicsScene>
 #include <QSoundEffect>
 #include "notification/notification.h"
+class StoreWindow;
 class Notification;
 namespace Ui {
 class View;
@@ -29,7 +30,6 @@ public:
     void set_fight_command(std::shared_ptr<Command>);
     void set_pick_key_command(std::shared_ptr<Command>);
     void set_floor_change_command(std::shared_ptr<Command>);
-    void set_dialog_command(std::shared_ptr<Command>);
     void set_move_up_command(std::shared_ptr<Command>);
     void set_move_down_command(std::shared_ptr<Command>);
     void set_move_left_command(std::shared_ptr<Command>);
@@ -43,11 +43,12 @@ public:
 
     void LoadImageBeforeGame();
     void HideFightWindow();
-    //void init_tower();
     void set_braver(std::shared_ptr<BRAVER> x);
     void set_tower(std::shared_ptr<FLOOR*> x);
     void set_monster(std::shared_ptr<MONSTER*> x);
     int handle_keypress(int key_no, int& target_pos, int& old_data);
+
+    StoreWindow* get_wstore();
 public slots:
     void OnNormalTimerTriggered();
     void OnOpenDoorTimerTriggered();
@@ -134,6 +135,8 @@ private:
     std::shared_ptr<MONSTER*> Monster;
     GLOBAL_VARS Vars;
     std::shared_ptr<FLOOR*> Tower;
+
+    StoreWindow* wstore;
 };
 
 class UpdateViewNotification: public Notification{

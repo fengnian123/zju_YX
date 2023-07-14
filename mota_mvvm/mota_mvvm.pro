@@ -15,7 +15,6 @@ SOURCES += \
     view/StoreWindow.cpp \
     view/view.cpp \
     app/app.cpp \
-    viewmodel/dialog_command.cpp \
     viewmodel/fight_command.cpp \
     viewmodel/floor_change_command.cpp \
     viewmodel/move_down_command.cpp \
@@ -24,17 +23,19 @@ SOURCES += \
     viewmodel/move_up_command.cpp \
     viewmodel/pick_item_command.cpp \
     viewmodel/pick_key_command.cpp \
+    viewmodel/buy_atk_command.cpp \
+    viewmodel/buy_def_command.cpp \
+    viewmodel/buy_hp_command.cpp \
     viewmodel/viewmodel.cpp \
     model/model.cpp \
     command/command.cpp \
     notification/notification.cpp \
-    variables/variables.cpp \
+    common/variables.cpp \
 
 HEADERS += \
     view/StoreWindow.h \
     view/view.h \
     app/app.h \
-    viewmodel/dialog_command.h \
     viewmodel/fight_command.h \
     viewmodel/floor_change_command.h \
     viewmodel/move_down_command.h \
@@ -43,21 +44,14 @@ HEADERS += \
     viewmodel/move_up_command.h \
     viewmodel/pick_item_command.h \
     viewmodel/pick_key_command.h \
+    viewmodel/buy_atk_command.h \
+    viewmodel/buy_def_command.h \
+    viewmodel/buy_hp_command.h \
     viewmodel/viewmodel.h \
     model/model.h \
     command/command.h \
     notification/notification.h \
-    variables/variables.h \
-    command/fight_command.h \
-    command/pick_key_command.h \
-    command/door_open_command.h \
-    command/floor_change_command.h \
-    command/dialog_command.h \
-    command/move_up_command.h \
-    command/move_down_command.h \
-    command/move_left_command.h \
-    command/move_right_command.h \
-    command/pick_item_command.h
+    common/variables.h \
 
 FORMS += \
     view/storewindow.ui \
